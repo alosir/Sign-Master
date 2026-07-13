@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand colors -->
+    <color name="primary">#3498db</color>
+    <color name="primary_dark">#2980b9</color>
+    <color name="primary_light">#5dade2</color>
+    <color name="accent">#e74c3c</color>
+
+    <!-- Material 3 tokens (light) -->
+    <color name="md_primary">#3498db</color>
+    <color name="md_on_primary">#ffffff</color>
+    <color name="md_primary_container">#d6eaf8</color>
+    <color name="md_on_primary_container">#001d36</color>
+
+    <color name="md_secondary">#2ecc71</color>
+    <color name="md_on_secondary">#ffffff</color>
+    <color name="md_secondary_container">#d5f5e3</color>
+    <color name="md_on_secondary_container">#002109</color>
+
+    <color name="md_tertiary">#f39c12</color>
+    <color name="md_on_tertiary">#ffffff</color>
+    <color name="md_tertiary_container">#fdebd0</color>
+    <color name="md_on_tertiary_container">#271900</color>
+
+    <color name="md_error">#e74c3c</color>
+    <color name="md_on_error">#ffffff</color>
+    <color name="md_error_container">#f9d6d3</color>
+    <color name="md_on_error_container">#410002</color>
+
+    <color name="md_surface">#f8f9fa</color>
+    <color name="md_on_surface">#2c3e50</color>
+    <color name="md_surface_variant">#f5f5f5</color>
+    <color name="md_on_surface_variant">#7f8c8d</color>
+    <color name="md_background">#f8f9fa</color>
+    <color name="md_on_background">#2c3e50</color>
+    <color name="md_outline">#bdc3c7</color>
+    <color name="md_outline_variant">#ecf0f1</color>
+
+    <!-- Checkin status colors -->
+    <color name="checkin_success">#27ae60</color>
+    <color name="checkin_pending">#95a5a6</color>
+    <color name="checkin_waiting">#f39c12</color>
+    <color name="streak_fire">#e67e22</color>
+
+    <!-- Legacy semantic colors -->
+    <color name="text_primary">#2c3e50</color>
+    <color name="text_secondary">#7f8c8d</color>
+    <color name="background">#f5f5f5</color>
+    <color name="card_background">#ffffff</color>
+    <color name="card_completed_bg">#e8e8e8</color>
+    <color name="scrim_color">#66000000</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PieChartView">
+        <attr name="holeRadiusRatio" format="float" />
+        <attr name="sliceStrokeWidth" format="dimension" />
+        <attr name="sliceStrokeColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CheckinCalendarView">
+        <attr name="dayTextSize" format="dimension" />
+        <attr name="cellPadding" format="dimension" />
+        <attr name="fullColor" format="color" />
+        <attr name="partialColor" format="color" />
+        <attr name="noneTextColor" format="color" />
+        <attr name="selectedStrokeColor" format="color" />
+        <attr name="selectedStrokeWidth" format="dimension" />
+    </declare-styleable>
+</resources>

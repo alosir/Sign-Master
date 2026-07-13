@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand colors -->
+    <color name="primary">#5dade2</color>
+    <color name="primary_dark">#3498db</color>
+    <color name="primary_light">#85c1e9</color>
+    <color name="accent">#f1948a</color>
+
+    <!-- Material 3 tokens (dark) -->
+    <color name="md_primary">#5dade2</color>
+    <color name="md_on_primary">#001d36</color>
+    <color name="md_primary_container">#0f4c81</color>
+    <color name="md_on_primary_container">#d6eaf8</color>
+
+    <color name="md_secondary">#58d68d</color>
+    <color name="md_on_secondary">#002109</color>
+    <color name="md_secondary_container">#1e8449</color>
+    <color name="md_on_secondary_container">#d5f5e3</color>
+
+    <color name="md_tertiary">#f5b041</color>
+    <color name="md_on_tertiary">#271900</color>
+    <color name="md_tertiary_container">#7d5100</color>
+    <color name="md_on_tertiary_container">#fdebd0</color>
+
+    <color name="md_error">#ec7063</color>
+    <color name="md_on_error">#410002</color>
+    <color name="md_error_container">#922b21</color>
+    <color name="md_on_error_container">#f9d6d3</color>
+
+    <color name="md_surface">#0f172a</color>
+    <color name="md_on_surface">#ecf0f1</color>
+    <color name="md_surface_variant">#1f2937</color>
+    <color name="md_on_surface_variant">#bdc3c7</color>
+    <color name="md_background">#0f172a</color>
+    <color name="md_on_background">#ecf0f1</color>
+    <color name="md_outline">#5d6d7e</color>
+    <color name="md_outline_variant">#34495e</color>
+
+    <!-- Checkin status colors -->
+    <color name="checkin_success">#2ecc71</color>
+    <color name="checkin_pending">#7f8c8d</color>
+    <color name="checkin_waiting">#f1c40f</color>
+    <color name="streak_fire">#f5b041</color>
+
+    <!-- Legacy semantic colors -->
+    <color name="text_primary">#ecf0f1</color>
+    <color name="text_secondary">#bdc3c7</color>
+    <color name="background">#1a1a2e</color>
+    <color name="card_background">#16213e</color>
+    <color name="card_completed_bg">#2c2c3e</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+</resources>

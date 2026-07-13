@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>签到大师 — 作品展示</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3498db',
+                        accent: '#e74c3c',
+                        dark: '#0a0a1a',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delay': 'float 8s ease-in-out 2s infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-20px) rotate(3deg)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(52,152,219,0.4)' },
+                            '50%': { boxShadow: '0 0 60px rgba(52,152,219,0.8)' },
+                        },
+                        slideUp: {
+                            from: { opacity: '0', transform: 'translateY(60px)' },
+                            to: { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        
+        body { background: #0a0a1a; overflow-x: hidden; }
+
+        /* 粒子背景 */
+        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+        /* 玻璃拟态 */
+        .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); }
+        .glass-strong { background: rgba(255,255,255,0.06); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.08); }
+
+        /* 渐变文字 */
+        .text-gradient { background: linear-gradient(135deg, #3498db 0%, #9b59b6 50%, #e74c3c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+        /* 光泽边框 */
+        .glow-border { position: relative; }
+        .glow-border::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; background: linear-gradient(135deg, #3498db, #9b59b6, #e74c3c); z-index: -1; opacity: 0.5; }
+        .glow-border::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: #0a0a1a; z-index: -1; }
+
+        /* 滚动动画 */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* 鼠标光晕 */
+        .spotlight { position: fixed; pointer-events: none; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(52,152,219,0.06) 0%, transparent 70%); transform: translate(-50%, -50%); z-index: 1; transition: opacity 0.3s; }
+
+        /* 打字效果 */
+        .typed-cursor { animation: blink 0.7s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* 技能标签 */
+        .skill-tag { transition: all 0.3s; }
+        .skill-tag:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(52,152,219,0.3); }
+
+        /* 卡片悬浮 */
+        .feature-card { transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+        .feature-card:hover { transform: translateY(-8px); background: rgba(255,255,255,0.06); border-color: rgba(52,152,219,0.3); }
+
+        /* 网格线背景 */
+        .grid-bg { background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 60px 60px; }
+
+        /* 代码风格标签 */
+        .code-tag { color: #6b7280; }
+        .code-tag::before { content: '<'; color: #6366f1; }
+        .code-tag::after { content: '/>'; color: #6366f1; }
+    </style>
+</head>
+<body class="text-white">
+
+<!-- 鼠标光晕 -->
+<div class="spotlight" id="spotlight"></div>
+
+<!-- 粒子画布 -->
+<canvas id="particles"></canvas>
+
+<!-- 导航 -->
+<nav class="fixed top-0 w-full z-50 glass border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-sm font-bold shadow-lg shadow-primary/20">✓</div>
+            <span class="font-semibold text-white/80">签到大师</span>
+        </div>
+        <div class="hidden sm:flex gap-8 text-sm text-white/50">
+            <a href="#features" class="hover:text-white transition">核心功能</a>
+            <a href="#tech" class="hover:text-white transition">技术实力</a>
+            <a href="#about" class="hover:text-white transition">关于</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<header class="relative min-h-screen flex items-center justify-center pt-20">
+    <div class="relative z-10 text-center max-w-4xl mx-auto px-6">
+        <div class="reveal">
+            <div class="inline-flex items-center gap-2 glass rounded-full px-5 py-2 text-sm text-white/60 mb-8">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse-glow"></span>
+                Android · Kotlin · MVVM
+            </div>
+        </div>
+        <h1 class="reveal text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight" style="animation-delay: 0.1s;">
+            <span class="text-gradient">签到大师</span>
+        </h1>
+        <p class="reveal text-xl sm:text-2xl text-white/40 font-light mb-3" style="animation-delay: 0.2s;">
+            不只是打卡，是<span class="text-white/70 font-medium">习惯养成的艺术</span>
+        </p>
+        <p class="reveal text-white/25 max-w-xl mx-auto leading-relaxed mb-10" style="animation-delay: 0.3s;">
+            一款追求极致的 Android 签到管理应用。从周期计算引擎到 Material Design 3 视觉呈现，<br class="hidden sm:block">每一行代码都经过精心打磨。
+        </p>
+        <div class="reveal flex flex-wrap gap-4 justify-center" style="animation-delay: 0.4s;">
+            <div class="glass-strong rounded-xl px-6 py-3 text-sm text-white/70">
+                <span class="text-primary font-semibold">30+</span> 源文件
+            </div>
+            <div class="glass-strong rounded-xl px-6 py-3 text-sm text-white/70">
+                <span class="text-primary font-semibold">3</span> 种签到类型
+            </div>
+            <div class="glass-strong rounded-xl px-6 py-3 text-sm text-white/70">
+                <span class="text-primary font-semibold">3</span> 种周期策略
+            </div>
+            <div class="glass-strong rounded-xl px-6 py-3 text-sm text-white/70">
+                <span class="text-primary font-semibold">v3.3.4</span>
+            </div>
+        </div>
+        <!-- 向下滚动提示 -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-40">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+        </div>
+    </div>
+</header>
+
+<!-- 功能展示 -->
+<section id="features" class="relative py-32 grid-bg">
+    <div class="relative z-10 max-w-6xl mx-auto px-6">
+        <div class="reveal text-center mb-16">
+            <h2 class="text-4xl font-bold mb-4">设计哲学</h2>
+            <p class="text-white/30 max-w-lg mx-auto">每个细节都经过深思熟虑</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- 卡片1 -->
+            <div class="feature-card glass rounded-2xl p-7 group cursor-default">
+                <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-2xl mb-5 group-hover:bg-blue-500/20 transition">📱</div>
+                <h3 class="font-bold text-lg mb-3 text-white/90">APP 签到</h3>
+                <p class="text-white/35 text-sm leading-relaxed mb-4">选择已安装应用，自动提取图标。点击即打开 APP 并标记签到——一步到位。</p>
+                <div class="flex gap-2">
+                    <span class="text-xs glass rounded-full px-3 py-1 text-primary/60">后台加载</span>
+                    <span class="text-xs glass rounded-full px-3 py-1 text-primary/60">图标自动</span>
+                </div>
+            </div>
+
+            <!-- 卡片2 -->
+            <div class="feature-card glass rounded-2xl p-7 group cursor-default">
+                <div class="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-2xl mb-5 group-hover:bg-green-500/20 transition">🌐</div>
+                <h3 class="font-bold text-lg mb-3 text-white/90">网站签到</h3>
+                <p class="text-white/35 text-sm leading-relaxed mb-4">添加任意网址，自动补全 https:// 前缀。一键跳转浏览器完成签到。</p>
+                <div class="flex gap-2">
+                    <span class="text-xs glass rounded-full px-3 py-1 text-green-400/60">自动前缀</span>
+                </div>
+            </div>
+
+            <!-- 卡片3 -->
+            <div class="feature-card glass rounded-2xl p-7 group cursor-default">
+                <div class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-2xl mb-5 group-hover:bg-purple-500/20 transition">📋</div>
+                <h3 class="font-bold text-lg mb-3 text-white/90">自定义任务</h3>
+                <p class="text-white/35 text-sm leading-relaxed mb-4">喝水、运动、用药……任何需要规律完成的任务，都可以加入签到列表。</p>
+                <div class="flex gap-2">
+                    <span class="text-xs glass rounded-full px-3 py-1 text-purple-400/60">灵活备注</span>
+                </div>
+            </div>
+
+            <!-- 周期引擎 -->
+            <div class="feature-card glass rounded-2xl p-7 lg:col-span-2 group cursor-default relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/3 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+                <div class="relative">
+                    <div class="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center text-2xl mb-5">⚡</div>
+                    <h3 class="font-bold text-xl mb-3 text-white/90">周期计算引擎</h3>
+                    <p class="text-white/35 text-sm leading-relaxed mb-6 max-w-2xl">
+                        三种周期策略，精确到不同粒度的锚点：<span class="text-white/60">天 = 严格间隔</span> · <span class="text-white/60">周 = 锚定周一</span> · <span class="text-white/60">月 = 锚定月初</span>。
+                        每 N 天/周/月灵活组合，取模校验确保严格间隔。
+                    </p>
+                    <div class="grid sm:grid-cols-3 gap-4 text-center">
+                        <div class="glass-strong rounded-xl p-4">
+                            <div class="text-lg font-bold text-green-400">1~31 天</div>
+                            <div class="text-xs text-white/30 mt-1">毫秒级间隔</div>
+                        </div>
+                        <div class="glass-strong rounded-xl p-4">
+                            <div class="text-lg font-bold text-blue-400">1~52 周</div>
+                            <div class="text-xs text-white/30 mt-1">锚定每周一</div>
+                        </div>
+                        <div class="glass-strong rounded-xl p-4">
+                            <div class="text-lg font-bold text-purple-400">1~36 月</div>
+                            <div class="text-xs text-white/30 mt-1">锚定每月初</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 体验 -->
+            <div class="feature-card glass rounded-2xl p-7 group cursor-default">
+                <div class="w-12 h-12 rounded-2xl bg-teal-500/10 flex items-center justify-center text-2xl mb-5 group-hover:bg-teal-500/20 transition">✨</div>
+                <h3 class="font-bold text-lg mb-3 text-white/90">体验细节</h3>
+                <p class="text-white/35 text-sm leading-relaxed mb-4">右滑快速签到、Snackbar 反馈、深色模式适配、APP 列表秒开。</p>
+                <div class="flex gap-2 flex-wrap">
+                    <span class="text-xs glass rounded-full px-3 py-1 text-teal-400/60">手势交互</span>
+                    <span class="text-xs glass rounded-full px-3 py-1 text-teal-400/60">深色模式</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 技术栈展示 -->
+<section id="tech" class="relative py-32">
+    <div class="relative z-10 max-w-6xl mx-auto px-6">
+        <div class="reveal text-center mb-16">
+            <h2 class="text-4xl font-bold mb-4">技术实力</h2>
+            <p class="text-white/30">从架构到细节，每一层都经过精心设计</p>
+        </div>
+
+        <!-- 架构图 -->
+        <div class="reveal glass rounded-3xl p-8 md:p-12 mb-12 overflow-hidden">
+            <div class="flex flex-col items-center gap-3 text-sm text-white/40">
+                <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">UI Layer · Fragment + ViewPager2 + Material 3</div>
+                <div class="text-white/10 text-lg">↓</div>
+                <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">ViewModel · LiveData + Coroutines</div>
+                <div class="text-white/10 text-lg">↓</div>
+                <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">Repository · 数据访问抽象层</div>
+                <div class="text-white/10 text-lg">↓</div>
+                <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">Data · Room SQLite · WorkManager</div>
+            </div>
+        </div>
+
+        <!-- 技能标签云 -->
+        <div class="flex flex-wrap justify-center gap-3">
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-blue-400">Kotlin</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-purple-400">MVVM</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-green-400">Room</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-orange-400">Coroutines</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-teal-400">LiveData</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-pink-400">ViewBinding</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-yellow-400">WorkManager</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-blue-300">Material 3</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-red-400">DiffUtil</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-cyan-400">Gson</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-lime-400">ViewPager2</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-indigo-400">Snackbar</span>
+        </div>
+    </div>
+</section>
+
+<!-- 关于 -->
+<section id="about" class="relative py-32">
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+        <div class="reveal glass rounded-3xl p-10 md:p-14">
+            <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-3xl font-bold mb-6 mx-auto shadow-2xl shadow-primary/20">✓</div>
+            <h2 class="text-3xl font-bold mb-4">签到大师 · CheckinMaster</h2>
+            <p class="text-white/30 leading-relaxed max-w-lg mx-auto mb-8">
+                一款独立开发的 Android 原生应用。采用 Kotlin + MVVM 架构，
+                搭载自研周期计算引擎，以 Material Design 3 呈现。
+                这是个人技术能力与产品思维的集中体现。
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <div class="text-2xl font-bold text-primary">v3.3.4</div>
+                <div class="text-white/20">·</div>
+                <div class="text-white/40">Android 5.0+</div>
+                <div class="text-white/20">·</div>
+                <div class="text-white/40">30+ 源文件</div>
+            </div>
+        </div>
+
+        <p class="reveal mt-10 text-white/20 text-sm">
+            更多作品即将加入 · 个人作品集打造中
+        </p>
+    </div>
+</section>
+
+<script>
+// ============ 粒子背景 ============
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: -1000, y: -1000 };
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+class Particle {
+    constructor() {
+        this.reset();
+        this.y = Math.random() * canvas.height;
+    }
+    reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = -10;
+        this.size = Math.random() * 2 + 0.5;
+        this.speed = Math.random() * 0.6 + 0.2;
+        this.opacity = Math.random() * 0.4 + 0.1;
+        this.wobble = Math.random() * 0.3;
+    }
+    update() {
+        this.y += this.speed;
+        this.x += Math.sin(this.y * 0.01) * this.wobble;
+        if (this.y > canvas.height + 10) this.reset();
+    }
+    draw() {
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const glow = Math.max(0, 1 - dist / 200);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size + glow * 2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(52,152,219,${this.opacity + glow * 0.3})`;
+        ctx.fill();
+    }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+}
+animate();
+
+document.addEventListener('mousemove', e => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    const spot = document.getElementById('spotlight');
+    spot.style.left = e.clientX + 'px';
+    spot.style.top = e.clientY + 'px';
+    spot.style.opacity = '1';
+});
+
+// ============ 滚动动画 ============
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+    });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ============ 卡片3D倾斜 ============
+document.querySelectorAll('.feature-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `translateY(-8px) perspective(1000px) rotateY(${x * 5}deg) rotateX(${-y * 5}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+    });
+});
+</script>
+</body>
+</html>
