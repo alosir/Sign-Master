@@ -1,6 +1,6 @@
-# CheckinMaster 构建指南
+# Sign Master 构建指南
 
-**最后更新**: 2026-06-14 — v3.3.4
+**最后更新**: 2026-07-13 — v1.0.0
 
 ## 环境要求
 
@@ -35,7 +35,7 @@ export JAVA_HOME="<你的 JDK 17 路径>"
 export PATH="$JAVA_HOME/bin:$PATH"
 ```
 
-> 把 `<你的 JDK 17 路径>` 替换为你机器上的实际路径，例如 `D:\dev\JDK\17.0.19`（Windows）或 `/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home`（macOS）。
+> 把 `<你的 JDK 17 路径>` 替换为你机器上的实际路径。
 
 ### 2. 验证环境
 ```bash
@@ -62,11 +62,35 @@ BUILD SUCCESSFUL in Xs
 Debug APK 产物：`app/build/outputs/apk/debug/app-debug.apk`
 
 ### 4. 编译 Release 版本
+
+Release 需要签名。项目已提供 `keystore.properties.sample` 模板。
+
+#### 4.1 配置 Release 签名
+
+1. 生成 keystore（如还没有）：
+```bash
+keytool -genkey -v -keystore my-release-key.keystore -alias alosir_task -keyalg RSA -keysize 2048 -validity 10000
+```
+
+2. 复制模板并填写：
+```bash
+cp keystore.properties.sample keystore.properties
+```
+
+3. 编辑 `keystore.properties`：
+```properties
+RELEASE_STORE_FILE=../my-release-key.keystore
+RELEASE_STORE_PASSWORD=你的库密码
+RELEASE_KEY_ALIAS=alosir_task
+RELEASE_KEY_PASSWORD=你的别名密码
+```
+
+> `keystore.properties` 和 `my-release-key.keystore` 已在 `.gitignore` 中，不会被提交。
+
+#### 4.2 编译 Release
 ```bash
 ./gradlew assembleRelease
 ```
-
-> Release 已配置内置签名 `my-release-key.keystore`（签名参数通过 `gradle.properties` 的 `RELEASE_*` 属性读取），无需用户额外配置即可产出已签名 APK。
 
 Release APK 产物：`app/build/outputs/apk/release/app-release.apk`
 
@@ -82,7 +106,7 @@ Plugin [id: 'org.jetbrains.kotlin.android', version: '1.9.20'] was not found
 
 **原因**: Gradle 无法从默认仓库下载 Kotlin 插件
 
-**解决方案**: 在 `settings.gradle.kts` 中添加阿里云 Maven 镜像
+**解决方案**: 在 `settings.gradle.kts` 中配置国内镜像
 ```kotlin
 pluginManagement {
     repositories {
@@ -126,21 +150,12 @@ export JAVA_HOME="/d/dev/JDK/17.0.19"  # ✅ 正确
 Edit error: EBUSY: resource busy or locked
 ```
 
-**原因**: Gradle Daemon 正在运行并锁定了 `settings.gradle.kts`
+**原因**: Gradle Daemon 正在运行并锁定了文件
 
 **解决方案**:
 ```bash
-# 方法 1: 停止 Gradle 守护进程
 ./gradlew --stop
-
-# 方法 2: 强制结束 Java 进程
-# Windows:
-taskkill /F /IM java.exe
-# macOS / Linux:
-pkill -f java
 ```
-
-✅ **推荐**: 遇到文件锁时，使用 `Write` 工具而非 `Edit`
 
 ---
 
@@ -155,10 +170,6 @@ pkill -f java
 # 本地配置（推荐）
 git config user.name "your-name"
 git config user.email "your-email@example.com"
-
-# 或全局配置
-git config --global user.name "your-name"
-git config --global user.email "your-email@example.com"
 ```
 
 ---
@@ -169,7 +180,7 @@ git config --global user.email "your-email@example.com"
 Debug 版本:
 app/build/outputs/apk/debug/app-debug.apk
 
-Release 版本（已签名）:
+Release 版本:
 app/build/outputs/apk/release/app-release.apk
 ```
 
@@ -180,28 +191,6 @@ ls -lh app/build/outputs/apk/debug/*.apk
 # Windows PowerShell
 Get-ChildItem app/build/outputs/apk/debug/*.apk | Select-Object Name, Length
 ```
-
----
-
-## 优化建议
-
-### 1. 使用 Gradle 缓存
-Gradle 会自动缓存依赖，第二次构建会快很多：
-```
-BUILD SUCCESSFUL in 2s
-38 actionable tasks: 1 executed, 37 up-to-date
-```
-
-### 2. 配置 Gradle 守护进程
-在 `gradle.properties` 中添加：
-```properties
-org.gradle.daemon=true
-org.gradle.parallel=true
-org.gradle.caching=true
-```
-
-### 3. 使用阿里云 Maven 镜像
-已在 `settings.gradle.kts` 中配置，加速依赖下载
 
 ---
 
@@ -227,19 +216,19 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 ## 项目结构
 
 ```
-CheckinMaster/
+Sign-Master/
 ├── app/                          # 主应用模块
 │   ├── build.gradle.kts          # 应用级构建配置
 │   ├── src/main/
 │   │   ├── AndroidManifest.xml   # 应用清单
-│   │   ├── java/.../           # Kotlin 源码
-│   │   └── res/                # 资源文件
-│   └── build/outputs/apk/      # 生成的 APK
-├── build.gradle.kts             # 项目级构建配置
-├── settings.gradle.kts          # 项目设置和插件管理
-├── gradle.properties           # Gradle 配置
-└── gradlew                     # Gradle Wrapper (Linux/Mac)
-    gradlew.bat                  # Gradle Wrapper (Windows)
+│   │   ├── java/.../             # Kotlin 源码
+│   │   └── res/                  # 资源文件
+│   └── build/outputs/apk/        # 生成的 APK
+├── build.gradle.kts              # 项目级构建配置
+├── settings.gradle.kts           # 项目设置和插件管理
+├── gradle.properties             # Gradle 配置
+├── gradlew                       # Gradle Wrapper (Linux/Mac)
+└── gradlew.bat                   # Gradle Wrapper (Windows)
 ```
 
 ---
@@ -254,7 +243,6 @@ CheckinMaster/
 | **Room** | 2.6.1 | 数据库 |
 | **Lifecycle** | 2.7.0 | 生命周期管理 |
 | **WorkManager** | 2.9.0 | 后台任务 |
-| **Coil** | 2.5.0 | 图片加载 |
 | **Gson** | 2.10.1 | JSON 解析 |
 
 ---
@@ -268,7 +256,7 @@ CheckinMaster/
 # 编译 Debug
 ./gradlew assembleDebug
 
-# 编译 Release（已签名）
+# 编译 Release
 ./gradlew assembleRelease
 
 # 运行测试
@@ -283,14 +271,5 @@ CheckinMaster/
 
 ---
 
-## 更新日志
-
-- **2026-06-14**: 通用化环境/路径描述；改用 `./gradlew` 包装器；Release 已配置内置签名
-- **2026-06-11**: 初始版本，记录完整构建流程和常见问题
-- **2026-06-11**: 添加阿里云 Maven 镜像配置
-- **2026-06-11**: 修复 Gradle 插件下载失败问题
-
----
-
-**维护者**: CheckinMaster Dev
-**最后更新**: 2026-06-14
+**维护者**: Sign Master Dev  
+**最后更新**: 2026-07-13

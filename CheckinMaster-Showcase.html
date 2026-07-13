@@ -116,7 +116,7 @@
         <div class="reveal">
             <div class="inline-flex items-center gap-2 glass rounded-full px-5 py-2 text-sm text-white/60 mb-8">
                 <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse-glow"></span>
-                Android · Kotlin · MVVM
+                Android · Kotlin · MVVM · v1.0.0
             </div>
         </div>
         <h1 class="reveal text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight" style="animation-delay: 0.1s;">
@@ -130,16 +130,16 @@
         </p>
         <div class="reveal flex flex-wrap gap-4 justify-center" style="animation-delay: 0.4s;">
             <div class="glass-strong rounded-xl px-6 py-3 text-sm text-white/70">
-                <span class="text-primary font-semibold">30+</span> 源文件
+                <span class="text-primary font-semibold">45+</span> 源文件
             </div>
             <div class="glass-strong rounded-xl px-6 py-3 text-sm text-white/70">
                 <span class="text-primary font-semibold">3</span> 种签到类型
             </div>
             <div class="glass-strong rounded-xl px-6 py-3 text-sm text-white/70">
-                <span class="text-primary font-semibold">3</span> 种周期策略
+                <span class="text-primary font-semibold">4</span> 种周期模式
             </div>
             <div class="glass-strong rounded-xl px-6 py-3 text-sm text-white/70">
-                <span class="text-primary font-semibold">v3.3.4</span>
+                <span class="text-primary font-semibold">v1.0.0</span>
             </div>
         </div>
         <!-- 向下滚动提示 -->
@@ -153,8 +153,8 @@
 <section id="features" class="relative py-32 grid-bg">
     <div class="relative z-10 max-w-6xl mx-auto px-6">
         <div class="reveal text-center mb-16">
-            <h2 class="text-4xl font-bold mb-4">设计哲学</h2>
-            <p class="text-white/30 max-w-lg mx-auto">每个细节都经过深思熟虑</p>
+            <h2 class="text-4xl font-bold mb-4">核心功能</h2>
+            <p class="text-white/30 max-w-lg mx-auto">四页架构，覆盖签到全生命周期</p>
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -194,23 +194,27 @@
                 <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/3 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
                 <div class="relative">
                     <div class="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center text-2xl mb-5">⚡</div>
-                    <h3 class="font-bold text-xl mb-3 text-white/90">周期计算引擎</h3>
+                    <h3 class="font-bold text-xl mb-3 text-white/90">周期与提醒引擎</h3>
                     <p class="text-white/35 text-sm leading-relaxed mb-6 max-w-2xl">
-                        三种周期策略，精确到不同粒度的锚点：<span class="text-white/60">天 = 严格间隔</span> · <span class="text-white/60">周 = 锚定周一</span> · <span class="text-white/60">月 = 锚定月初</span>。
-                        每 N 天/周/月灵活组合，取模校验确保严格间隔。
+                        每天 / 每周 / 每月 / 自定义 四种周期模式，支持多选星期几、多选日期、跳过节假日与周末。
+                        到达提醒时间自动推送系统通知，点击通知直达今日任务。
                     </p>
-                    <div class="grid sm:grid-cols-3 gap-4 text-center">
+                    <div class="grid sm:grid-cols-4 gap-4 text-center">
                         <div class="glass-strong rounded-xl p-4">
-                            <div class="text-lg font-bold text-green-400">1~31 天</div>
-                            <div class="text-xs text-white/30 mt-1">毫秒级间隔</div>
+                            <div class="text-lg font-bold text-green-400">每天</div>
+                            <div class="text-xs text-white/30 mt-1">每 N 天</div>
                         </div>
                         <div class="glass-strong rounded-xl p-4">
-                            <div class="text-lg font-bold text-blue-400">1~52 周</div>
-                            <div class="text-xs text-white/30 mt-1">锚定每周一</div>
+                            <div class="text-lg font-bold text-blue-400">每周</div>
+                            <div class="text-xs text-white/30 mt-1">多选星期</div>
                         </div>
                         <div class="glass-strong rounded-xl p-4">
-                            <div class="text-lg font-bold text-purple-400">1~36 月</div>
-                            <div class="text-xs text-white/30 mt-1">锚定每月初</div>
+                            <div class="text-lg font-bold text-purple-400">每月</div>
+                            <div class="text-xs text-white/30 mt-1">多选日期</div>
+                        </div>
+                        <div class="glass-strong rounded-xl p-4">
+                            <div class="text-lg font-bold text-pink-400">提醒</div>
+                            <div class="text-xs text-white/30 mt-1">系统通知</div>
                         </div>
                     </div>
                 </div>
@@ -219,10 +223,10 @@
             <!-- 体验 -->
             <div class="feature-card glass rounded-2xl p-7 group cursor-default">
                 <div class="w-12 h-12 rounded-2xl bg-teal-500/10 flex items-center justify-center text-2xl mb-5 group-hover:bg-teal-500/20 transition">✨</div>
-                <h3 class="font-bold text-lg mb-3 text-white/90">体验细节</h3>
-                <p class="text-white/35 text-sm leading-relaxed mb-4">右滑快速签到、Snackbar 反馈、深色模式适配、APP 列表秒开。</p>
+                <h3 class="font-bold text-lg mb-3 text-white/90">四页体验</h3>
+                <p class="text-white/35 text-sm leading-relaxed mb-4">今日、任务、统计、我的。底部导航清晰分区，下拉刷新即时同步。</p>
                 <div class="flex gap-2 flex-wrap">
-                    <span class="text-xs glass rounded-full px-3 py-1 text-teal-400/60">手势交互</span>
+                    <span class="text-xs glass rounded-full px-3 py-1 text-teal-400/60">底部导航</span>
                     <span class="text-xs glass rounded-full px-3 py-1 text-teal-400/60">深色模式</span>
                 </div>
             </div>
@@ -241,13 +245,13 @@
         <!-- 架构图 -->
         <div class="reveal glass rounded-3xl p-8 md:p-12 mb-12 overflow-hidden">
             <div class="flex flex-col items-center gap-3 text-sm text-white/40">
-                <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">UI Layer · Fragment + ViewPager2 + Material 3</div>
+                <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">UI Layer · Fragment + BottomNavigation + Material 3</div>
                 <div class="text-white/10 text-lg">↓</div>
                 <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">ViewModel · LiveData + Coroutines</div>
                 <div class="text-white/10 text-lg">↓</div>
                 <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">Repository · 数据访问抽象层</div>
                 <div class="text-white/10 text-lg">↓</div>
-                <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">Data · Room SQLite · WorkManager</div>
+                <div class="glass-strong rounded-xl px-8 py-3 w-full max-w-md text-center">Data · Room SQLite · WorkManager · AlarmManager</div>
             </div>
         </div>
 
@@ -263,7 +267,7 @@
             <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-blue-300">Material 3</span>
             <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-red-400">DiffUtil</span>
             <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-cyan-400">Gson</span>
-            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-lime-400">ViewPager2</span>
+            <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-lime-400">AlarmManager</span>
             <span class="skill-tag glass rounded-full px-5 py-2.5 text-sm text-white/60 hover:text-indigo-400">Snackbar</span>
         </div>
     </div>
@@ -277,15 +281,15 @@
             <h2 class="text-3xl font-bold mb-4">签到大师 · CheckinMaster</h2>
             <p class="text-white/30 leading-relaxed max-w-lg mx-auto mb-8">
                 一款独立开发的 Android 原生应用。采用 Kotlin + MVVM 架构，
-                搭载自研周期计算引擎，以 Material Design 3 呈现。
+                搭载自研周期计算引擎与提醒通知系统，以 Material Design 3 呈现。
                 这是个人技术能力与产品思维的集中体现。
             </p>
             <div class="flex flex-wrap gap-4 justify-center">
-                <div class="text-2xl font-bold text-primary">v3.3.4</div>
+                <div class="text-2xl font-bold text-primary">v1.0.0</div>
                 <div class="text-white/20">·</div>
                 <div class="text-white/40">Android 5.0+</div>
                 <div class="text-white/20">·</div>
-                <div class="text-white/40">30+ 源文件</div>
+                <div class="text-white/40">45+ 源文件</div>
             </div>
         </div>
 
