@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.alosir.task.data.CheckinDatabase
 import com.alosir.task.data.entity.CheckinItem
 import com.alosir.task.data.entity.CheckinRecord
+import com.alosir.task.util.AppBadgeManager
 import com.alosir.task.util.CycleCalculator
 import com.alosir.task.util.ReminderScheduler
 import kotlinx.coroutines.Job
@@ -83,6 +84,7 @@ class CheckinListViewModel(application: Application) : AndroidViewModel(applicat
         }.sortedWith(pendingComparator())
 
         _pendingItems.postValue(pending)
+        AppBadgeManager.updateBadge(getApplication(), pending.size)
     }
 
     private suspend fun refreshAllPendingItems() {

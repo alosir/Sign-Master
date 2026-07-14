@@ -43,8 +43,8 @@ android {
         applicationId = "com.alosir.task"
         minSdk = 21
         targetSdk = 34
-        versionCode = 36
-        versionName = "3.3.4"
+        versionCode = 37
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -100,6 +100,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.coil)
     implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.shortcutbadger)
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

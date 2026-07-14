@@ -15,6 +15,7 @@ gson = "2.10.1"
 coil = "2.5.0"
 workmanager = "2.9.0"
 swiperefreshlayout = "1.1.0"
+shortcutbadger = "1.1.22"
 junit = "4.13.2"
 extJunit = "1.1.5"
 espresso = "3.5.1"
@@ -39,6 +40,7 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+shortcutbadger = { group = "me.leolin", name = "ShortcutBadger", version.ref = "shortcutbadger" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "extJunit" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }

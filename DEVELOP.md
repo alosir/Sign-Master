@@ -1,6 +1,6 @@
 # 签到大师 - 开发者技术指南
 
-**当前版本**: v1.0.0  
+**当前版本**: v1.0.1  
 **最后更新**: 2026-07-13
 
 ## 目录
@@ -341,6 +341,7 @@ compareBy(
 | 我的 Fragment | `ui/fragment/ProfileFragment.kt` | 导入导出 / 通知权限 |
 | ViewModel | `ui/viewmodel/CheckinListViewModel.kt` | 签到状态核心 |
 | 添加 BottomSheet | `ui/bottomsheet/AddCheckinBottomSheet.kt` | 添加任务 |
+| 角标管理 | `util/AppBadgeManager.kt` | 桌面图标数字角标 |
 | 周期算法 | `util/CycleCalculator.kt` | 核心周期判断 |
 | 提醒调度 | `util/ReminderScheduler.kt` | AlarmManager 提醒 |
 | 数据库 | `data/CheckinDatabase.kt` | Room 数据库 |
