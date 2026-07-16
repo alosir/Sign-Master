@@ -177,7 +177,9 @@
     
     <string name="settings">设置</string>
     <string name="about">关于</string>
-    <string name="version">版本 3.3.4</string>
+    <string name="version">版本 %1$s</string>
+    <string name="update_date">更新日期 %1$s</string>
+    <string name="app_update_date">2026-07-13</string>
 
     <!-- Permissions -->
     <string name="permission_query_apps_required">需要获取已安装应用列表权限，才能选择需要签到的 APP</string>

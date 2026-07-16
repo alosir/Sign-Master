@@ -43,8 +43,8 @@ android {
         applicationId = "com.alosir.task"
         minSdk = 21
         targetSdk = 34
-        versionCode = 37
-        versionName = "1.0.1"
+        versionCode = 38
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -75,6 +75,7 @@ android {
     
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

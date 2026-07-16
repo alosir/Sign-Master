@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.alosir.task.BuildConfig
 import com.alosir.task.R
 import com.alosir.task.databinding.FragmentProfileBinding
 import com.alosir.task.ui.MainActivity
@@ -28,6 +29,9 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.versionText.text = getString(R.string.version, BuildConfig.VERSION_NAME)
+        binding.updateDateText.text = getString(R.string.update_date, getString(R.string.app_update_date))
 
         binding.btnExport.setOnClickListener {
             (requireActivity() as? MainActivity)?.exportData()
