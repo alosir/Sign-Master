@@ -97,8 +97,11 @@ class VersionUpdateActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val release = UpdateChecker.checkLatestRelease()
-                if (release == null) {
-                    Toast.makeText(this@VersionUpdateActivity, R.string.check_update_failed, Toast.LENGTH_SHORT).show()
+                val apkAsset = release?.assets?.firstOrNull { it.name.endsWith(".apk", ignoreCase = true) }
+
+                // 没有 Release 或 Release 中没有 APK 时，视为已是最新
+                if (release == null || apkAsset == null) {
+                    Toast.makeText(this@VersionUpdateActivity, R.string.already_latest, Toast.LENGTH_SHORT).show()
                     return@launch
                 }
 
