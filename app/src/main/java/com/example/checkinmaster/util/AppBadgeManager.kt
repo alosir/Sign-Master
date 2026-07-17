@@ -23,7 +23,7 @@ object AppBadgeManager {
             } else {
                 ShortcutBadger.applyCount(context, count)
             }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             // 部分 OEM 桌面不支持或异常，静默忽略，避免崩溃
             e.printStackTrace()
         }
@@ -35,7 +35,7 @@ object AppBadgeManager {
     fun removeBadge(context: Context) {
         try {
             ShortcutBadger.removeCount(context)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             e.printStackTrace()
         }
     }

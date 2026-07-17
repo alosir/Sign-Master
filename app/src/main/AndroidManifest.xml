@@ -30,6 +30,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.VersionUpdateActivity"
+            android:exported="false"
+            android:label="@string/version_update_title" />
+
         <service
             android:name=".service.AutomationService"
             android:label="@string/service_label"
