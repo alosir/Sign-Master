@@ -1,5 +1,6 @@
 package com.alosir.task.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import com.alosir.task.BuildConfig
 import com.alosir.task.R
 import com.alosir.task.databinding.FragmentProfileBinding
 import com.alosir.task.ui.MainActivity
+import com.alosir.task.ui.VersionUpdateActivity
 import com.alosir.task.util.NotificationPermissionHelper
 
 class ProfileFragment : Fragment() {
@@ -30,8 +32,11 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.versionText.text = getString(R.string.version, BuildConfig.VERSION_NAME)
-        binding.updateDateText.text = getString(R.string.update_date, getString(R.string.app_update_date))
+        binding.versionText.text = BuildConfig.VERSION_NAME
+
+        binding.btnVersion.setOnClickListener {
+            startActivity(Intent(requireContext(), VersionUpdateActivity::class.java))
+        }
 
         binding.btnExport.setOnClickListener {
             (requireActivity() as? MainActivity)?.exportData()

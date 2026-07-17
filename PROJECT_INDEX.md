@@ -1,7 +1,7 @@
 # 签到大师项目 - 完整索引
 
-**当前版本**: v1.0.2  
-**最后更新**: 2026-07-13
+**当前版本**: v1.1.0  
+**最后更新**: 2026-07-17
 
 > 本文件是项目文件清单与功能索引，最新结构以 [README.md](README.md) 的「项目结构」段为准。
 
@@ -44,6 +44,7 @@ Sign-Master/
 #### Application 和入口
 - `CheckinApplication.kt`
 - `ui/MainActivity.kt`
+- `ui/VersionUpdateActivity.kt`
 
 #### UI 层
 - `ui/fragment/TodayFragment.kt`
@@ -181,5 +182,5 @@ app/build/outputs/apk/release/app-release.apk
 
 ---
 
-*最后更新：2026-07-13*  
-*项目版本：v1.0.2*
+*最后更新：2026-07-17*  
+*项目版本：v1.1.0*
