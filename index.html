@@ -17,62 +17,83 @@
         html { scroll-behavior: smooth; }
 
         body {
-            background: #050505;
-            color: #fff;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 50%, #ffffff 100%);
+            color: #0f172a;
             overflow-x: hidden;
         }
 
-        ::selection { background: rgba(59,130,246,.35); }
+        ::selection { background: rgba(59,130,246,.25); }
 
+        /* 鼠标跟随光环 */
+        .cursor-glow {
+            position: fixed;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59,130,246,.15) 0%, rgba(168,85,247,.08) 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            transition: transform .12s ease-out, opacity .3s ease;
+            opacity: 0;
+        }
+
+        /* 背景网格 */
         .grid-bg {
             position: fixed;
             inset: 0;
             z-index: -2;
             background-image:
-                linear-gradient(rgba(59,130,246,.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59,130,246,.06) 1px, transparent 1px);
+                linear-gradient(rgba(59,130,246,.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59,130,246,.05) 1px, transparent 1px);
             background-size: 48px 48px;
-            mask-image: radial-gradient(circle at 50% 20%, black 20%, transparent 70%);
+            mask-image: radial-gradient(circle at 50% 20%, black 20%, transparent 75%);
         }
 
         .glow-orb {
             position: fixed;
             border-radius: 50%;
-            filter: blur(90px);
+            filter: blur(100px);
             z-index: -1;
-            animation: float 14s ease-in-out infinite;
+            animation: float 16s ease-in-out infinite;
+            opacity: .6;
         }
-        .orb-1 { width: 500px; height: 500px; background: rgba(59,130,246,.18); top: -10%; left: -8%; }
-        .orb-2 { width: 380px; height: 380px; background: rgba(168,85,247,.12); bottom: -6%; right: -6%; animation-delay: -7s; }
+        .orb-1 { width: 560px; height: 560px; background: rgba(59,130,246,.18); top: -12%; left: -10%; }
+        .orb-2 { width: 420px; height: 420px; background: rgba(168,85,247,.14); bottom: -8%; right: -8%; animation-delay: -8s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-24px) scale(1.04); }
+            50% { transform: translateY(-30px) scale(1.05); }
         }
 
         .glass {
-            background: rgba(255,255,255,.045);
-            border: 1px solid rgba(255,255,255,.08);
-            backdrop-filter: blur(16px);
+            background: rgba(255,255,255,.65);
+            border: 1px solid rgba(255,255,255,.8);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 8px 32px rgba(15,23,42,.06);
         }
 
         .glass-strong {
-            background: rgba(255,255,255,.08);
-            border: 1px solid rgba(255,255,255,.12);
-            backdrop-filter: blur(22px);
+            background: rgba(255,255,255,.85);
+            border: 1px solid rgba(255,255,255,.95);
+            backdrop-filter: blur(24px);
+            box-shadow: 0 20px 60px rgba(15,23,42,.08);
         }
 
-        .neon {
-            color: #3b82f6;
-            text-shadow: 0 0 24px rgba(59,130,246,.65);
+        .gradient-text {
+            background: linear-gradient(135deg, #2563eb, #7c3aed, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .btn-primary {
             position: relative;
             background: linear-gradient(135deg, #2563eb, #7c3aed);
-            box-shadow: 0 0 30px rgba(59,130,246,.45);
-            transition: all .25s ease;
+            box-shadow: 0 12px 40px rgba(59,130,246,.35);
+            transition: all .3s cubic-bezier(.22,1,.36,1);
             overflow: hidden;
+            color: #fff;
         }
         .btn-primary::before {
             content: '';
@@ -80,64 +101,92 @@
             inset: 0;
             background: linear-gradient(135deg, #3b82f6, #8b5cf6);
             opacity: 0;
-            transition: opacity .25s ease;
+            transition: opacity .3s ease;
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+            transition: left .5s ease;
         }
         .btn-primary:hover::before { opacity: 1; }
+        .btn-primary:hover::after { left: 100%; }
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 48px rgba(59,130,246,.65);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(59,130,246,.5);
         }
 
         .btn-secondary {
-            background: rgba(255,255,255,.06);
-            border: 1px solid rgba(255,255,255,.1);
-            transition: all .25s ease;
+            background: rgba(255,255,255,.8);
+            border: 1px solid rgba(15,23,42,.08);
+            transition: all .3s cubic-bezier(.22,1,.36,1);
+            color: #0f172a;
         }
         .btn-secondary:hover {
-            background: rgba(255,255,255,.1);
-            border-color: rgba(255,255,255,.2);
-            transform: translateY(-3px);
+            background: #fff;
+            border-color: rgba(15,23,42,.15);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(15,23,42,.1);
         }
 
         .feature-card {
             position: relative;
-            transition: all .3s ease;
+            transition: all .35s cubic-bezier(.22,1,.36,1);
+            transform-style: preserve-3d;
         }
         .feature-card::before {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: 24px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(59,130,246,.35), rgba(168,85,247,.15));
+            padding: 1.5px;
+            background: linear-gradient(135deg, rgba(59,130,246,.4), rgba(168,85,247,.2));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             opacity: 0;
-            transition: opacity .3s ease;
+            transition: opacity .35s ease;
         }
         .feature-card:hover::before { opacity: 1; }
-        .feature-card:hover { transform: translateY(-6px); }
+        .feature-card:hover {
+            transform: translateY(-8px) rotateX(2deg) rotateY(2deg);
+            box-shadow: 0 24px 60px rgba(15,23,42,.1);
+        }
+
+        .icon-bounce {
+            transition: all .35s cubic-bezier(.68,-.55,.265,1.55);
+        }
+        .feature-card:hover .icon-bounce {
+            transform: scale(1.12) rotate(-5deg);
+        }
 
         .phone-frame {
             position: relative;
             width: 280px;
             height: 580px;
             border-radius: 42px;
-            background: linear-gradient(145deg, #1e1e22, #0b0b0d);
-            border: 2px solid rgba(255,255,255,.08);
+            background: linear-gradient(145deg, #ffffff, #e2e8f0);
+            border: 2px solid rgba(255,255,255,.9);
             box-shadow:
-                0 0 60px rgba(59,130,246,.25),
-                inset 0 0 0 1px rgba(255,255,255,.03);
+                0 30px 80px rgba(15,23,42,.15),
+                0 0 0 1px rgba(15,23,42,.05),
+                inset 0 0 0 1px rgba(255,255,255,.5);
             padding: 14px;
+            transition: transform .3s ease;
+            transform-style: preserve-3d;
         }
         .phone-screen {
             width: 100%;
             height: 100%;
             border-radius: 32px;
-            background: linear-gradient(180deg, #0f1116, #07080c);
+            background: linear-gradient(180deg, #f1f5f9, #ffffff);
             overflow: hidden;
             position: relative;
+            border: 1px solid rgba(15,23,42,.05);
         }
         .phone-notch {
             position: absolute;
@@ -146,31 +195,39 @@
             transform: translateX(-50%);
             width: 110px;
             height: 24px;
-            background: #050505;
+            background: #0f172a;
             border-radius: 14px;
             z-index: 10;
+            box-shadow: 0 4px 12px rgba(15,23,42,.3);
         }
 
         .reveal {
             opacity: 0;
-            transform: translateY(32px);
-            transition: all .8s cubic-bezier(.22,1,.36,1);
+            transform: translateY(36px);
+            transition: all .9s cubic-bezier(.22,1,.36,1);
         }
         .reveal.visible { opacity: 1; transform: translateY(0); }
 
         .reveal-left {
             opacity: 0;
-            transform: translateX(-40px);
-            transition: all .8s cubic-bezier(.22,1,.36,1);
+            transform: translateX(-48px);
+            transition: all .9s cubic-bezier(.22,1,.36,1);
         }
         .reveal-left.visible { opacity: 1; transform: translateX(0); }
 
         .reveal-right {
             opacity: 0;
-            transform: translateX(40px);
-            transition: all .8s cubic-bezier(.22,1,.36,1);
+            transform: translateX(48px);
+            transition: all .9s cubic-bezier(.22,1,.36,1);
         }
         .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(.92);
+            transition: all .9s cubic-bezier(.22,1,.36,1);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
 
         .typing {
             overflow: hidden;
@@ -197,46 +254,74 @@
             50% { transform: translateY(10px); opacity: 1; }
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        .stat-card {
+            position: relative;
+            overflow: hidden;
         }
-
-        .stat-card { position: relative; overflow: hidden; }
         .stat-card::after {
             content: '';
             position: absolute;
             top: 0; left: -100%;
             width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
             animation: shimmer 3s infinite;
         }
         @keyframes shimmer {
             100% { left: 100%; }
         }
 
-        .roadmap-line {
+        .story-card {
+            position: relative;
+            overflow: hidden;
+            transition: all .35s cubic-bezier(.22,1,.36,1);
+        }
+        .story-card::before {
+            content: '';
             position: absolute;
-            left: 50%;
             top: 0;
-            bottom: 0;
-            width: 1px;
-            background: linear-gradient(180deg, transparent, rgba(59,130,246,.35), transparent);
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed, #ec4899);
+            opacity: 0;
+            transition: opacity .35s ease;
+        }
+        .story-card:hover::before { opacity: 1; }
+        .story-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(15,23,42,.1);
         }
 
-        .roadmap-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #3b82f6;
-            box-shadow: 0 0 16px rgba(59,130,246,.7);
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(15,23,42,.15);
+        }
+
+        .marquee {
+            display: flex;
+            gap: 1rem;
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .tilt {
+            transition: transform .2s ease-out;
+            transform-style: preserve-3d;
         }
 
         @media (max-width: 768px) {
             .phone-frame { width: 240px; height: 500px; }
-            .roadmap-line { left: 16px; }
+            .cursor-glow { display: none; }
         }
     </style>
 </head>
@@ -245,40 +330,41 @@
     <div class="grid-bg"></div>
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
 
     <!-- 导航 -->
     <nav class="fixed top-0 left-0 right-0 z-50 glass">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <img src="logo.png" alt="签到大师" class="w-9 h-9 rounded-xl shadow-lg shadow-blue-500/20">
-                <span class="font-bold text-lg tracking-wide">签到大师</span>
-            </div>
-            <div class="hidden md:flex items-center gap-8 text-sm text-white/50">
-                <a href="#features" class="hover:text-white transition">功能特性</a>
-                <a href="#roadmap" class="hover:text-white transition">更新计划</a>
-                <a href="#download" class="hover:text-white transition">下载</a>
-                <a href="https://github.com/alosir/Sign-Master" target="_blank" class="hover:text-white transition">GitHub</a>
+            <a href="#" class="flex items-center gap-3 group">
+                <img src="logo.png" alt="签到大师" class="w-9 h-9 rounded-xl shadow-lg shadow-blue-500/20 transition-transform group-hover:scale-110 group-hover:rotate-3">
+                <span class="font-bold text-lg tracking-wide text-slate-800">签到大师</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm text-slate-500">
+                <a href="#features" class="hover:text-slate-800 transition">功能特性</a>
+                <a href="#stories" class="hover:text-slate-800 transition">用户故事</a>
+                <a href="#download" class="hover:text-slate-800 transition">下载</a>
+                <a href="https://github.com/alosir/Sign-Master" target="_blank" class="hover:text-slate-800 transition">GitHub</a>
             </div>
             <a href="#download" class="btn-primary px-5 py-2 rounded-full text-sm font-semibold">下载 APP</a>
         </div>
     </nav>
 
     <!-- Hero -->
-    <section class="min-h-screen flex items-center justify-center pt-24 px-6">
+    <section class="min-h-screen flex items-center justify-center pt-24 px-6 relative">
         <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
 
-            <div class="reveal-left">
-                <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs text-white/50 mb-6">
-                    <span class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></span>
+            <div class="reveal-left relative z-10">
+                <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs text-slate-500 mb-6">
+                    <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
                     v1.1.2 已发布 · 数据完全本地存储
                 </div>
 
-                <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6">
+                <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6 text-slate-800">
                     一次管理<br>
                     <span class="gradient-text">所有签到</span>
                 </h1>
 
-                <p class="text-white/40 text-lg leading-relaxed max-w-md mb-8">
+                <p class="text-slate-500 text-lg leading-relaxed max-w-md mb-8">
                     签到大师是一款 Android 本地签到管理应用。集中管理 APP、网站和自定义任务，灵活周期、提醒通知、数据统计与版本更新，全部本地运行，隐私无忧。
                 </p>
 
@@ -299,41 +385,41 @@
                     </a>
                 </div>
 
-                <div class="flex flex-wrap gap-6 text-sm text-white/30">
+                <div class="flex flex-wrap gap-6 text-sm text-slate-400">
                     <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         Android 5.0+
                     </div>
                     <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         完全免费开源
                     </div>
                     <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                         数据不上云
                     </div>
                 </div>
             </div>
 
             <div class="reveal-right flex justify-center">
-                <div class="phone-frame">
+                <div class="phone-frame tilt" id="phoneFrame">
                     <div class="phone-notch"></div>
                     <div class="phone-screen">
-                        <img src="logo.png" alt="签到大师" class="absolute inset-0 m-auto w-40 h-40 object-contain opacity-90">
+                        <img src="logo.png" alt="签到大师" class="absolute inset-0 m-auto w-40 h-40 object-contain opacity-90 drop-shadow-2xl">
                         <div class="absolute bottom-6 left-0 right-0 px-4">
                             <div class="glass rounded-2xl p-4">
-                                <div class="text-xs text-white/40 mb-2 mono">今日待签到</div>
+                                <div class="text-xs text-slate-400 mb-2 mono">今日待签到</div>
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-sm">APP 签到</span>
-                                    <span class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">▶</span>
+                                    <span class="text-sm text-slate-600">APP 签到</span>
+                                    <span class="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 text-xs">▶</span>
                                 </div>
                                 <div class="flex items-center justify-between mb-3">
-                                    <span class="text-sm">网站签到</span>
-                                    <span class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">🌐</span>
+                                    <span class="text-sm text-slate-600">网站签到</span>
+                                    <span class="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 text-xs">🌐</span>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm">自定义任务</span>
-                                    <span class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">✓</span>
+                                    <span class="text-sm text-slate-600">自定义任务</span>
+                                    <span class="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-600 text-xs">✓</span>
                                 </div>
                             </div>
                         </div>
@@ -342,78 +428,168 @@
             </div>
 
         </div>
+
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-down">
+            <svg class="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+        </div>
     </section>
 
     <!-- 功能特性 -->
     <section id="features" class="py-24 px-6">
         <div class="max-w-7xl mx-auto">
             <div class="reveal text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">核心功能</h2>
-                <p class="text-white/30">四页架构，覆盖签到全生命周期</p>
+                <h2 class="text-4xl font-bold mb-4 text-slate-800">核心功能</h2>
+                <p class="text-slate-400">四页架构，覆盖签到全生命周期</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="feature-card glass rounded-3xl p-8">
-                    <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-3xl mb-6">📱</div>
-                    <h3 class="text-xl font-bold mb-3">APP 签到</h3>
-                    <p class="text-white/35 text-sm leading-relaxed">选择已安装应用，自动提取图标。点击即打开 APP 并标记签到，一步到位。</p>
+                    <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">📱</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">APP 签到</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">选择已安装应用，自动提取图标。点击即打开 APP 并标记签到，一步到位。</p>
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8">
-                    <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center text-3xl mb-6">🌐</div>
-                    <h3 class="text-xl font-bold mb-3">网站签到</h3>
-                    <p class="text-white/35 text-sm leading-relaxed">添加任意网址，自动补全 https:// 前缀。一键跳转浏览器完成签到。</p>
+                    <div class="w-14 h-14 rounded-2xl bg-green-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">🌐</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">网站签到</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">添加任意网址，自动补全 https:// 前缀。一键跳转浏览器完成签到。</p>
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8">
-                    <div class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center text-3xl mb-6">📋</div>
-                    <h3 class="text-xl font-bold mb-3">自定义任务</h3>
-                    <p class="text-white/35 text-sm leading-relaxed">喝水、运动、用药……任何需要规律完成的任务，都可以加入签到列表。</p>
+                    <div class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">📋</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">自定义任务</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">喝水、运动、用药……任何需要规律完成的任务，都可以加入签到列表。</p>
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8 lg:col-span-2">
-                    <div class="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center text-3xl mb-6">⚡</div>
-                    <h3 class="text-xl font-bold mb-3">周期与提醒引擎</h3>
-                    <p class="text-white/35 text-sm leading-relaxed mb-6 max-w-2xl">
+                    <div class="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">⚡</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">周期与提醒引擎</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6 max-w-2xl">
                         每天 / 每周 / 每月 / 自定义 四种周期模式，支持多选星期几、多选日期、跳过节假日与周末。
                         到达提醒时间自动推送系统通知，点击通知直达今日任务。
                     </p>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div class="glass-strong rounded-xl p-4 text-center">
-                            <div class="text-lg font-bold text-green-400">每天</div>
-                            <div class="text-xs text-white/30 mt-1">每 N 天</div>
+                            <div class="text-lg font-bold text-green-600">每天</div>
+                            <div class="text-xs text-slate-400 mt-1">每 N 天</div>
                         </div>
                         <div class="glass-strong rounded-xl p-4 text-center">
-                            <div class="text-lg font-bold text-blue-400">每周</div>
-                            <div class="text-xs text-white/30 mt-1">多选星期</div>
+                            <div class="text-lg font-bold text-blue-600">每周</div>
+                            <div class="text-xs text-slate-400 mt-1">多选星期</div>
                         </div>
                         <div class="glass-strong rounded-xl p-4 text-center">
-                            <div class="text-lg font-bold text-purple-400">每月</div>
-                            <div class="text-xs text-white/30 mt-1">多选日期</div>
+                            <div class="text-lg font-bold text-purple-600">每月</div>
+                            <div class="text-xs text-slate-400 mt-1">多选日期</div>
                         </div>
                         <div class="glass-strong rounded-xl p-4 text-center">
-                            <div class="text-lg font-bold text-pink-400">提醒</div>
-                            <div class="text-xs text-white/30 mt-1">系统通知</div>
+                            <div class="text-lg font-bold text-pink-600">提醒</div>
+                            <div class="text-xs text-slate-400 mt-1">系统通知</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8">
-                    <div class="w-14 h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center text-3xl mb-6">📊</div>
-                    <h3 class="text-xl font-bold mb-3">数据统计</h3>
-                    <p class="text-white/35 text-sm leading-relaxed">月度日历、完成率、类型分布、连续签到排行，清晰掌握签到状态。</p>
+                    <div class="w-14 h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">📊</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">数据统计</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">月度日历、完成率、类型分布、连续签到排行，清晰掌握签到状态。</p>
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8">
-                    <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 flex items-center justify-center text-3xl mb-6">🔒</div>
-                    <h3 class="text-xl font-bold mb-3">本地数据</h3>
-                    <p class="text-white/35 text-sm leading-relaxed">Room 本地数据库 + JSON 导入导出，数据完全掌握在自己手中。</p>
+                    <div class="w-14 h-14 rounded-2xl bg-yellow-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">🔒</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">本地数据</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Room 本地数据库 + JSON 导入导出，数据完全掌握在自己手中。</p>
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8">
-                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-3xl mb-6">🔔</div>
-                    <h3 class="text-xl font-bold mb-3">版本更新</h3>
-                    <p class="text-white/35 text-sm leading-relaxed">内置版本更新页面，支持从 GitHub 检查并下载最新安装包。</p>
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">🔔</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">版本更新</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">内置版本更新页面，支持从 GitHub 检查并下载最新安装包。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 用户故事 -->
+    <section id="stories" class="py-24 px-6 bg-white/40">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-slate-800">用户故事</h2>
+                <p class="text-slate-400">他们如何告别遗忘，保持每天签到</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="story-card glass rounded-3xl p-8 reveal">
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="avatar bg-gradient-to-br from-blue-500 to-indigo-600">L</div>
+                        <div>
+                            <div class="font-bold text-slate-800">林晨</div>
+                            <div class="text-xs text-slate-400">电商重度用户</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">"以前每天要打开七八个 APP 签到，经常漏掉一两个。现在打开签到大师，一目了然哪些还没签，点一下直接跳转，省了好多时间。"</p>
+                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★</div>
+                </div>
+
+                <div class="story-card glass rounded-3xl p-8 reveal">
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="avatar bg-gradient-to-br from-green-500 to-emerald-600">W</div>
+                        <div>
+                            <div class="font-bold text-slate-800">王悦</div>
+                            <div class="text-xs text-slate-400">程序员</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">"我把刷题网站、技术社区都加进来了。设置每周一、三、五提醒，手机一响就去完成。桌面角标数字让我时刻知道还剩几个任务。"</p>
+                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★</div>
+                </div>
+
+                <div class="story-card glass rounded-3xl p-8 reveal">
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="avatar bg-gradient-to-br from-purple-500 to-pink-600">Z</div>
+                        <div>
+                            <div class="font-bold text-slate-800">张婷</div>
+                            <div class="text-xs text-slate-400">家庭主妇</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">"除了 APP 签到，我还用它记录每天喝水、喂鱼、给孩子读书。自定义周期很灵活，统计页的小绿点特别有成就感。"</p>
+                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★</div>
+                </div>
+
+                <div class="story-card glass rounded-3xl p-8 reveal">
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="avatar bg-gradient-to-br from-orange-500 to-red-600">C</div>
+                        <div>
+                            <div class="font-bold text-slate-800">陈浩</div>
+                            <div class="text-xs text-slate-400">大学生</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">"换手机的时候导出一个 JSON 文件，在新手机上一键导入，所有签到记录和历史数据都回来了，特别方便。"</p>
+                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★</div>
+                </div>
+
+                <div class="story-card glass rounded-3xl p-8 reveal">
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="avatar bg-gradient-to-br from-cyan-500 to-blue-600">A</div>
+                        <div>
+                            <div class="font-bold text-slate-800">阿哲</div>
+                            <div class="text-xs text-slate-400">自由职业者</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">"最打动我的是数据完全本地存储，不用注册账号，不担心隐私泄露。而且完全免费开源，用着很放心。"</p>
+                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★</div>
+                </div>
+
+                <div class="story-card glass rounded-3xl p-8 reveal">
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="avatar bg-gradient-to-br from-rose-500 to-pink-600">S</div>
+                        <div>
+                            <div class="font-bold text-slate-800">思琪</div>
+                            <div class="text-xs text-slate-400">运营专员</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">"每天上班路上把公交、外卖、咖啡几个 APP 的签到全点一遍。界面简洁好看，深色模式晚上用也不刺眼。"</p>
+                    <div class="flex items-center gap-1 text-yellow-400 text-sm">★★★★★</div>
                 </div>
             </div>
         </div>
@@ -423,94 +599,42 @@
     <section class="py-24 px-6">
         <div class="max-w-4xl mx-auto">
             <div class="reveal text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">技术架构</h2>
-                <p class="text-white/30">现代化 Android 技术栈，性能与体验兼备</p>
+                <h2 class="text-4xl font-bold mb-4 text-slate-800">技术架构</h2>
+                <p class="text-slate-400">现代化 Android 技术栈，性能与体验兼备</p>
             </div>
 
-            <div class="reveal glass rounded-3xl p-8">
+            <div class="reveal-scale glass rounded-3xl p-8">
                 <div class="grid md:grid-cols-2 gap-8">
                     <div>
-                        <h3 class="font-bold text-lg mb-4 text-blue-400">开发语言</h3>
+                        <h3 class="font-bold text-lg mb-4 text-blue-600">开发语言</h3>
                         <div class="flex flex-wrap gap-2">
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">Kotlin 1.9.20</span>
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">Java 17</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Kotlin 1.9.20</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Java 17</span>
                         </div>
                     </div>
                     <div>
-                        <h3 class="font-bold text-lg mb-4 text-purple-400">架构模式</h3>
+                        <h3 class="font-bold text-lg mb-4 text-purple-600">架构模式</h3>
                         <div class="flex flex-wrap gap-2">
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">MVVM</span>
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">Repository</span>
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">LiveData</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">MVVM</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Repository</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">LiveData</span>
                         </div>
                     </div>
                     <div>
-                        <h3 class="font-bold text-lg mb-4 text-green-400">数据层</h3>
+                        <h3 class="font-bold text-lg mb-4 text-green-600">数据层</h3>
                         <div class="flex flex-wrap gap-2">
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">Room 2.6.1</span>
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">SQLite</span>
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">Gson</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Room 2.6.1</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">SQLite</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Gson</span>
                         </div>
                     </div>
                     <div>
-                        <h3 class="font-bold text-lg mb-4 text-pink-400">后台任务</h3>
+                        <h3 class="font-bold text-lg mb-4 text-pink-600">后台任务</h3>
                         <div class="flex flex-wrap gap-2">
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">WorkManager</span>
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">AlarmManager</span>
-                            <span class="glass px-3 py-1.5 rounded-full text-xs">Coroutines</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">WorkManager</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">AlarmManager</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Coroutines</span>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 版本 Roadmap -->
-    <section id="roadmap" class="py-24 px-6">
-        <div class="max-w-4xl mx-auto">
-            <div class="reveal text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">更新计划</h2>
-                <p class="text-white/30">持续进化，只为更好的签到体验</p>
-            </div>
-
-            <div class="relative">
-                <div class="roadmap-line hidden md:block"></div>
-
-                <div class="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-12">
-                    <div class="reveal md:text-right md:pr-8 md:pb-12">
-                        <div class="inline-flex items-center gap-2 md:flex-row-reverse">
-                            <span class="roadmap-dot hidden md:inline-block"></span>
-                            <span class="mono text-blue-400 font-bold">v1.1.2</span>
-                        </div>
-                        <h3 class="font-bold mt-2 mb-1">稳定性修复</h3>
-                        <p class="text-white/35 text-sm">修复启动闪退；增强角标容错；优化 GitHub 检查更新逻辑。</p>
-                    </div>
-
-                    <div class="reveal md:pl-8 md:pb-12 md:pt-8">
-                        <div class="inline-flex items-center gap-2">
-                            <span class="roadmap-dot hidden md:inline-block"></span>
-                            <span class="mono text-purple-400 font-bold">v1.2.0</span>
-                        </div>
-                        <h3 class="font-bold mt-2 mb-1">自动化签到</h3>
-                        <p class="text-white/35 text-sm">接入无障碍服务，支持脚本录制与回放，实现真正的自动签到。</p>
-                    </div>
-
-                    <div class="reveal md:text-right md:pr-8 md:pb-12 md:pt-8">
-                        <div class="inline-flex items-center gap-2 md:flex-row-reverse">
-                            <span class="roadmap-dot hidden md:inline-block"></span>
-                            <span class="mono text-green-400 font-bold">v1.3.0</span>
-                        </div>
-                        <h3 class="font-bold mt-2 mb-1">数据增强</h3>
-                        <p class="text-white/35 text-sm">按任务查看历史日历；支持 CSV 导出；云备份选项。</p>
-                    </div>
-
-                    <div class="reveal md:pl-8 md:pb-12 md:pt-8">
-                        <div class="inline-flex items-center gap-2">
-                            <span class="roadmap-dot hidden md:inline-block"></span>
-                            <span class="mono text-pink-400 font-bold">v2.0.0</span>
-                        </div>
-                        <h3 class="font-bold mt-2 mb-1">大改版</h3>
-                        <p class="text-white/35 text-sm">全新 Compose UI；多端同步；社区模板；AI 智能周期推荐。</p>
                     </div>
                 </div>
             </div>
@@ -525,8 +649,8 @@
 
                 <div class="relative">
                     <img src="logo.png" alt="签到大师" class="w-24 h-24 mx-auto mb-6 rounded-3xl shadow-2xl shadow-blue-500/30">
-                    <h2 class="text-4xl font-bold mb-4">立即开始使用</h2>
-                    <p class="text-white/35 mb-8 max-w-md mx-auto">完全免费开源，数据本地存储。支持 Android 5.0 及以上设备。</p>
+                    <h2 class="text-4xl font-bold mb-4 text-slate-800">立即开始使用</h2>
+                    <p class="text-slate-500 mb-8 max-w-md mx-auto">完全免费开源，数据本地存储。支持 Android 5.0 及以上设备。</p>
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
                         <a href="https://github.com/alosir/Sign-Master/releases/latest/download/app-release.apk"
@@ -542,7 +666,7 @@
                         </a>
                     </div>
 
-                    <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-white/30">
+                    <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-slate-400">
                         <span class="mono">v1.1.2</span>
                         <span>·</span>
                         <span>6.3 MB</span>
@@ -555,19 +679,77 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 px-6 border-t border-white/5">
+    <footer class="py-12 px-6 border-t border-slate-200/50">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <img src="logo.png" alt="签到大师" class="w-8 h-8 rounded-lg">
-                <span class="font-semibold">签到大师 Sign Master</span>
+                <span class="font-semibold text-slate-800">签到大师 Sign Master</span>
             </div>
-            <div class="text-sm text-white/30">
-                开源项目 · 数据本地存储 · <a href="https://github.com/alosir/Sign-Master" target="_blank" class="text-blue-400 hover:underline">GitHub</a>
+            <div class="text-sm text-slate-400">
+                开源项目 · 数据本地存储 · <a href="https://github.com/alosir/Sign-Master" target="_blank" class="text-blue-500 hover:underline">GitHub</a>
             </div>
         </div>
     </footer>
 
     <script>
+        // 鼠标跟随光环
+        const cursorGlow = document.getElementById('cursorGlow');
+        let glowX = 0, glowY = 0, currentX = 0, currentY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            glowX = e.clientX;
+            glowY = e.clientY;
+            cursorGlow.style.opacity = '1';
+        });
+
+        document.addEventListener('mouseleave', () => {
+            cursorGlow.style.opacity = '0';
+        });
+
+        function animateGlow() {
+            currentX += (glowX - currentX) * 0.08;
+            currentY += (glowY - currentY) * 0.08;
+            cursorGlow.style.transform = `translate(${currentX - 160}px, ${currentY - 160}px)`;
+            requestAnimationFrame(animateGlow);
+        }
+        animateGlow();
+
+        // 手机 3D 倾斜
+        const phoneFrame = document.getElementById('phoneFrame');
+        const heroSection = document.querySelector('section');
+
+        heroSection.addEventListener('mousemove', (e) => {
+            const rect = phoneFrame.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const rotateX = (e.clientY - centerY) / 40;
+            const rotateY = (e.clientX - centerX) / -40;
+            phoneFrame.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        heroSection.addEventListener('mouseleave', () => {
+            phoneFrame.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+
+        // 卡片鼠标倾斜
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+            });
+        });
+
+        // 滚动进入动画
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -576,7 +758,7 @@
             });
         }, { threshold: 0.12 });
 
-        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
     </script>
 
 </body>
