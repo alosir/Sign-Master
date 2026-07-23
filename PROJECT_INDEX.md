@@ -17,6 +17,7 @@ Sign-Master/
 ├── PROJECT_INDEX.md              # 本文件
 ├── 项目交付报告.md                # 项目交付说明
 ├── CheckinMaster-Showcase.html   # 视觉展示页
+├── index.html                     # APP 官网页（GitHub Pages）
 ├── app/                          # Android 项目目录
 ├── my-release-key.keystore       # Release 签名（不提交 Git）
 └── keystore.properties.sample    # Release 签名配置模板

@@ -169,6 +169,7 @@ app/src/main/
 - [PROJECT_INDEX.md](PROJECT_INDEX.md) — 项目文件索引
 - [项目交付报告.md](项目交付报告.md) — 项目交付说明
 - [CheckinMaster-Showcase.html](CheckinMaster-Showcase.html) — 视觉展示页
+- [index.html](index.html) — APP 官网页（含最新 Release APK 下载）
 
 ## 版本历史
 
