@@ -53,6 +53,11 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
                 val streakRanking = StatisticsCalculator.calculateStreakRanking(allRecords, items)
                 val calendarDays = buildCalendarDays(year, month, monthRecords, items)
 
+                val (earliestYear, earliestMonth) = computeEarliestRecordMonth(allRecords)
+
+                val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+                val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1
+
                 _uiState.postValue(
                     StatisticsUiState(
                         year = year,
@@ -72,6 +77,10 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
                         typeDistribution = typeDistribution,
                         streakRanking = streakRanking,
                         calendarDays = calendarDays,
+                        earliestYear = earliestYear,
+                        earliestMonth = earliestMonth,
+                        currentYear = currentYear,
+                        currentMonth = currentMonth,
                         selectedDateRecords = emptyList()
                     )
                 )
@@ -81,12 +90,36 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    private fun computeEarliestRecordMonth(records: List<CheckinRecord>): Pair<Int, Int> {
+        if (records.isEmpty()) {
+            val now = Calendar.getInstance()
+            return now.get(Calendar.YEAR) to (now.get(Calendar.MONTH) + 1)
+        }
+
+        val minDateStr = records.minByOrNull { it.checkinDate }?.checkinDate ?: return run {
+            val now = Calendar.getInstance()
+            now.get(Calendar.YEAR) to (now.get(Calendar.MONTH) + 1)
+        }
+
+        return try {
+            val parts = minDateStr.split("-")
+            parts[0].toInt() to parts[1].toInt()
+        } catch (e: Exception) {
+            val now = Calendar.getInstance()
+            now.get(Calendar.YEAR) to (now.get(Calendar.MONTH) + 1)
+        }
+    }
+
     fun goToPreviousMonth() {
+        val current = _uiState.value ?: return
+        if (!canGoPrevious(current)) return
         calendar.add(Calendar.MONTH, -1)
         loadStatistics()
     }
 
     fun goToNextMonth() {
+        val current = _uiState.value ?: return
+        if (!canGoNext(current)) return
         calendar.add(Calendar.MONTH, 1)
         loadStatistics()
     }
@@ -94,6 +127,16 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     fun resetToCurrentMonth() {
         calendar.time = Date()
         loadStatistics()
+    }
+
+    private fun canGoPrevious(state: StatisticsUiState): Boolean {
+        return state.year > state.earliestYear ||
+                (state.year == state.earliestYear && state.month > state.earliestMonth)
+    }
+
+    private fun canGoNext(state: StatisticsUiState): Boolean {
+        return state.year < state.currentYear ||
+                (state.year == state.currentYear && state.month < state.currentMonth)
     }
 
     fun selectDate(dateStr: String) {
@@ -161,6 +204,10 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
         val typeDistribution: StatisticsCalculator.TypeDistribution = StatisticsCalculator.TypeDistribution(0, 0, 0, 0),
         val streakRanking: List<StatisticsCalculator.StreakInfo> = emptyList(),
         val calendarDays: List<CalendarDay> = emptyList(),
+        val earliestYear: Int = 0,
+        val earliestMonth: Int = 1,
+        val currentYear: Int = 0,
+        val currentMonth: Int = 1,
         val selectedDate: String? = null,
         val selectedDateRecords: List<RecordWithItem> = emptyList()
     )

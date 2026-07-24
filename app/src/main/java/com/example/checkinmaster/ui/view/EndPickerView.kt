@@ -1,8 +1,11 @@
 package com.alosir.task.ui.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.LinearLayout
@@ -34,17 +37,54 @@ class EndPickerView @JvmOverloads constructor(
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private val monthFormat = SimpleDateFormat("yyyy年MM月", Locale.getDefault())
 
+    private val currentYear: Int
+    private val currentMonth: Int
+    private val minYear: Int
+    private val minMonth: Int
+    private val maxYear = 2050
+    private val maxMonth = 11
+
+    private var gestureDetector: GestureDetector
+
     init {
         orientation = VERTICAL
 
         val today = Calendar.getInstance()
         calendarYear = today.get(Calendar.YEAR)
         calendarMonth = today.get(Calendar.MONTH)
+        currentYear = calendarYear
+        currentMonth = calendarMonth
+        minYear = calendarYear
+        minMonth = calendarMonth
 
         setupToggleGroup()
         setupCountPicker()
         setupCalendar()
+        setupSwipe()
         refreshDescription()
+
+        gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(
+                e1: MotionEvent?,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                val startX = e1?.x ?: return false
+                val startY = e1?.y ?: return false
+                val dx = e2.x - startX
+                val dy = e2.y - startY
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 100) {
+                    if (dx > 0) {
+                        goPrevMonth()
+                    } else {
+                        goNextMonth()
+                    }
+                    return true
+                }
+                return false
+            }
+        })
     }
 
     private fun setupToggleGroup() {
@@ -74,29 +114,58 @@ class EndPickerView @JvmOverloads constructor(
     }
 
     private fun setupCalendar() {
-        binding.btnEndDatePrev.setOnClickListener {
-            calendarMonth--
-            if (calendarMonth < 0) {
-                calendarMonth = 11
-                calendarYear--
-            }
-            renderCalendar()
-        }
-
-        binding.btnEndDateNext.setOnClickListener {
-            calendarMonth++
-            if (calendarMonth > 11) {
-                calendarMonth = 0
-                calendarYear++
-            }
-            renderCalendar()
-        }
-
+        binding.btnEndDatePrev.setOnClickListener { goPrevMonth() }
+        binding.btnEndDateNext.setOnClickListener { goNextMonth() }
+        binding.btnEndDateToday.setOnClickListener { goCurrentMonth() }
         renderCalendar()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupSwipe() {
+        binding.endDateCalendar.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+            true
+        }
+    }
+
+    private fun goPrevMonth() {
+        if (!canGoPrev()) return
+        calendarMonth--
+        if (calendarMonth < 0) {
+            calendarMonth = 11
+            calendarYear--
+        }
+        renderCalendar()
+    }
+
+    private fun goNextMonth() {
+        if (!canGoNext()) return
+        calendarMonth++
+        if (calendarMonth > 11) {
+            calendarMonth = 0
+            calendarYear++
+        }
+        renderCalendar()
+    }
+
+    private fun goCurrentMonth() {
+        calendarYear = currentYear
+        calendarMonth = currentMonth
+        renderCalendar()
+    }
+
+    private fun canGoPrev(): Boolean {
+        return calendarYear > minYear || (calendarYear == minYear && calendarMonth > minMonth)
+    }
+
+    private fun canGoNext(): Boolean {
+        return calendarYear < maxYear || (calendarYear == maxYear && calendarMonth < maxMonth)
     }
 
     private fun renderCalendar() {
         binding.endDateCalendar.removeAllViews()
+
+        updateNavButtonStates()
 
         val cal = Calendar.getInstance().apply {
             set(Calendar.YEAR, calendarYear)
@@ -139,6 +208,21 @@ class EndPickerView @JvmOverloads constructor(
         }
     }
 
+    private fun updateNavButtonStates() {
+        val prevEnabled = canGoPrev()
+        val nextEnabled = canGoNext()
+        val isCurrent = calendarYear == currentYear && calendarMonth == currentMonth
+
+        binding.btnEndDatePrev.isEnabled = prevEnabled
+        binding.btnEndDatePrev.alpha = if (prevEnabled) 1f else 0.3f
+
+        binding.btnEndDateNext.isEnabled = nextEnabled
+        binding.btnEndDateNext.alpha = if (nextEnabled) 1f else 0.3f
+
+        binding.btnEndDateToday.isEnabled = !isCurrent
+        binding.btnEndDateToday.alpha = if (isCurrent) 0.3f else 1f
+    }
+
     private fun createEmptyCell(): TextView {
         return TextView(context).apply {
             layoutParams = GridLayout.LayoutParams().apply {
@@ -175,7 +259,7 @@ class EndPickerView @JvmOverloads constructor(
         return TextView(context).apply {
             layoutParams = GridLayout.LayoutParams().apply {
                 width = 0
-                height = 36
+                height = 0
                 columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
                 setMargins(2, 2, 2, 2)

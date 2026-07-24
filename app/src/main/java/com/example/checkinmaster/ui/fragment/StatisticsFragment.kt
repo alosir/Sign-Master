@@ -109,6 +109,38 @@ class StatisticsFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+        setupCalendarSwipe()
+    }
+
+    private fun setupCalendarSwipe() {
+        val gestureDetector = android.view.GestureDetector(requireContext(),
+            object : android.view.GestureDetector.SimpleOnGestureListener() {
+                override fun onFling(
+                    e1: android.view.MotionEvent?,
+                    e2: android.view.MotionEvent,
+                    velocityX: Float,
+                    velocityY: Float
+                ): Boolean {
+                    val startX = e1?.x ?: return false
+                    val startY = e1?.y ?: return false
+                    val dx = e2.x - startX
+                    val dy = e2.y - startY
+                    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 100) {
+                        if (dx > 0) {
+                            viewModel.goToPreviousMonth()
+                        } else {
+                            viewModel.goToNextMonth()
+                        }
+                        return true
+                    }
+                    return false
+                }
+            })
+
+        binding.calendarView.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+            false
+        }
     }
 
     private fun setupMonthNavigation() {
@@ -180,6 +212,24 @@ class StatisticsFragment : Fragment() {
     private fun updateCalendar(state: StatisticsViewModel.StatisticsUiState) {
         binding.calendarView.days = state.calendarDays
         binding.calendarView.selectedDate = state.selectedDate
+        updateMonthNavigationButtons(state)
+    }
+
+    private fun updateMonthNavigationButtons(state: StatisticsViewModel.StatisticsUiState) {
+        val canGoPrev = state.year > state.earliestYear ||
+                (state.year == state.earliestYear && state.month > state.earliestMonth)
+        val canGoNext = state.year < state.currentYear ||
+                (state.year == state.currentYear && state.month < state.currentMonth)
+        val isCurrent = state.year == state.currentYear && state.month == state.currentMonth
+
+        binding.btnPreviousMonth.isEnabled = canGoPrev
+        binding.btnPreviousMonth.alpha = if (canGoPrev) 1f else 0.3f
+
+        binding.btnNextMonth.isEnabled = canGoNext
+        binding.btnNextMonth.alpha = if (canGoNext) 1f else 0.3f
+
+        binding.btnToday.isEnabled = !isCurrent
+        binding.btnToday.alpha = if (isCurrent) 0.3f else 1f
     }
 
     private fun updateTypeDistribution(state: StatisticsViewModel.StatisticsUiState) {

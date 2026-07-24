@@ -15,6 +15,31 @@ object ChangelogData {
 
     val versions: List<VersionInfo> = listOf(
         VersionInfo(
+            name = "v1.2.0",
+            date = "2026-07-18",
+            items = listOf(
+                "新增任务「终止」功能，可按次数、按日期或手动结束签到",
+                "新增后台保活服务，支持自启动与电池优化引导",
+                "统一任务详情弹窗，支持完成、恢复、编辑、终止、删除",
+                "已签到列表左滑改为「详情」",
+                "统计页连续签到排行显示任务描述"
+            )
+        ),
+        VersionInfo(
+            name = "v1.1.2",
+            date = "2026-07-17",
+            items = listOf(
+                "修复应用启动闪退问题"
+            )
+        ),
+        VersionInfo(
+            name = "v1.1.1",
+            date = "2026-07-17",
+            items = listOf(
+                "优化检查更新提示，无新版时显示「已是最新版本」"
+            )
+        ),
+        VersionInfo(
             name = "v1.1.0",
             date = "2026-07-13",
             items = listOf(

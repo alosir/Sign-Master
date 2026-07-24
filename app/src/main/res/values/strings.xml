@@ -199,6 +199,7 @@
     <string name="end_desc_date">%1$s 后自动结束</string>
     <string name="previous_month">上一月</string>
     <string name="next_month">下一月</string>
+    <string name="today">今天</string>
     <string name="terminate_item">终止</string>
     <string name="terminate_confirm">终止后该任务将停止签到，如需恢复请重新创建。</string>
     <string name="delete_item_confirm">将彻底删除该任务所有记录</string>
