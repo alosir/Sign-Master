@@ -49,6 +49,9 @@ interface CheckinRecordDao {
     @Query("SELECT * FROM checkin_records WHERE checkin_date >= :startDate AND checkin_date <= :endDate ORDER BY checkin_date ASC, checkin_time ASC")
     suspend fun getRecordsBetween(startDate: String, endDate: String): List<CheckinRecord>
 
+    @Query("SELECT COUNT(*) FROM checkin_records WHERE item_id = :itemId")
+    suspend fun getCountByItemId(itemId: Int): Int
+
     @Query("SELECT COUNT(*) FROM checkin_records")
     suspend fun getTotalCount(): Int
 

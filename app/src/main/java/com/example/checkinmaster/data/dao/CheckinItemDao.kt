@@ -40,7 +40,10 @@ interface CheckinItemDao {
     
     @Query("UPDATE checkin_items SET last_checkin_date = NULL WHERE id = :id")
     suspend fun clearLastCheckinDate(id: Int)
-    
+
+    @Query("UPDATE checkin_items SET terminated = :terminated, terminated_date = :terminatedDate WHERE id = :id")
+    suspend fun updateTerminated(id: Int, terminated: Int, terminatedDate: String?)
+
     @Query("SELECT COUNT(*) FROM checkin_items")
     suspend fun getCount(): Int
     

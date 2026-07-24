@@ -47,9 +47,29 @@ val MIGRATION_3_4 = object : Migration(3, 4) {
     }
 }
 
+val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            "ALTER TABLE checkin_items ADD COLUMN end_type INTEGER NOT NULL DEFAULT 0"
+        )
+        database.execSQL(
+            "ALTER TABLE checkin_items ADD COLUMN end_count INTEGER NOT NULL DEFAULT 0"
+        )
+        database.execSQL(
+            "ALTER TABLE checkin_items ADD COLUMN end_date TEXT"
+        )
+        database.execSQL(
+            "ALTER TABLE checkin_items ADD COLUMN terminated INTEGER NOT NULL DEFAULT 0"
+        )
+        database.execSQL(
+            "ALTER TABLE checkin_items ADD COLUMN terminated_date TEXT"
+        )
+    }
+}
+
 @Database(
     entities = [CheckinItem::class, CheckinRecord::class, AutomationScript::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class CheckinDatabase : RoomDatabase() {
@@ -69,7 +89,7 @@ abstract class CheckinDatabase : RoomDatabase() {
                     CheckinDatabase::class.java,
                     "checkin_database"
                 )
-                .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
+                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                 .build()
                 INSTANCE = instance
                 instance

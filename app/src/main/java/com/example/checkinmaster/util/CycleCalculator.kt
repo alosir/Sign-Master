@@ -1,6 +1,7 @@
 package com.alosir.task.util
 
 import com.alosir.task.data.entity.CheckinCycleType
+import com.alosir.task.data.entity.CheckinEndType
 import com.alosir.task.data.entity.CheckinItem
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,6 +21,13 @@ object CycleCalculator {
         item: CheckinItem,
         currentDate: Date = Date()
     ): Boolean {
+        // 已终止任务不可签到
+        if (item.terminated == 1) return false
+
+        // 超过结束日期不可签到
+        val endDate = parseDateOnly(item.endDate)
+        if (endDate != null && currentDate.after(endDate)) return false
+
         return isCheckinAvailableInternal(
             item.cycleType,
             item.cycleValue,
@@ -175,6 +183,115 @@ object CycleCalculator {
         )
     }
 
+    /**
+     * 判断任务是否已终止（手动终止或自动达到结束条件）。
+     */
+    fun isTerminated(item: CheckinItem, recordCount: Int, currentDate: Date = Date()): Boolean {
+        if (item.terminated == 1) return true
+
+        return when (item.endType) {
+            CheckinEndType.BY_COUNT -> item.endCount > 0 && recordCount >= item.endCount
+            CheckinEndType.BY_DATE -> {
+                val endDate = parseDateOnly(item.endDate) ?: return false
+                val today = Calendar.getInstance().apply {
+                    time = currentDate
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+                today.after(endDate)
+            }
+            else -> false
+        }
+    }
+
+    /**
+     * 判断任务在指定日期是否已终止（用于历史日历统计）。
+     */
+    fun isTerminatedOnDate(item: CheckinItem, recordCount: Int, date: Date): Boolean {
+        if (item.terminated == 1) {
+            val terminatedDate = parseDateOnly(item.terminatedDate)
+            return terminatedDate != null && !date.before(terminatedDate)
+        }
+
+        return when (item.endType) {
+            CheckinEndType.BY_COUNT -> item.endCount > 0 && recordCount >= item.endCount
+            CheckinEndType.BY_DATE -> {
+                val endDate = parseDateOnly(item.endDate) ?: return false
+                date.after(endDate)
+            }
+            else -> false
+        }
+    }
+
+    /**
+     * 获取任务的实际结束日期（按次数时推算最后一次签到日）。
+     */
+    fun getEffectiveEndDate(item: CheckinItem, recordCount: Int): Date? {
+        return when (item.endType) {
+            CheckinEndType.BY_DATE -> parseDateOnly(item.endDate)
+            CheckinEndType.BY_COUNT -> {
+                if (item.endCount <= 0) return null
+                // 从最近一个待签到日期开始推算第 N 次签到日期
+                val startDate = getNextCheckinDate(item) ?: parseDateOnly(item.createdAt) ?: return null
+                var count = recordCount
+                var current = startDate
+                val maxIterations = item.endCount + 10
+                var iterations = 0
+
+                while (count < item.endCount && iterations < maxIterations) {
+                    if (isScheduledForDate(item, current)) {
+                        count++
+                    }
+                    if (count >= item.endCount) break
+
+                    val next = getNextCheckinDateAfter(item, current)
+                    if (next == null || next.before(current) || isSameDay(
+                            Calendar.getInstance().apply { time = next },
+                            Calendar.getInstance().apply { time = current }
+                        )
+                    ) {
+                        break
+                    }
+                    current = next
+                    iterations++
+                }
+                current
+            }
+            else -> null
+        }
+    }
+
+    private fun getNextCheckinDateAfter(item: CheckinItem, date: Date): Date? {
+        val next = getNextCheckinDate(item, date) ?: return null
+        return if (isSameDay(
+                Calendar.getInstance().apply { time = next },
+                Calendar.getInstance().apply { time = date }
+            )
+        ) {
+            // 如果算出同一天，往后推一天再算
+            val tomorrow = Calendar.getInstance().apply {
+                time = date
+                add(Calendar.DAY_OF_MONTH, 1)
+            }
+            getNextCheckinDate(item, tomorrow.time)
+        } else next
+    }
+
+    private fun parseDateOnly(dateStr: String?): Date? {
+        if (dateStr.isNullOrEmpty()) return null
+        return try {
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(dateStr)
+        } catch (e: Exception) {
+            try {
+                SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(dateStr)
+            } catch (e2: Exception) {
+                null
+            }
+        }
+    }
+
     fun getCheckinStatus(item: CheckinItem, currentDate: Date = Date()): CheckinStatus {
         return if (isCheckinAvailable(item, currentDate)) CheckinStatus.PENDING else CheckinStatus.COMPLETED
     }
@@ -234,6 +351,10 @@ object CycleCalculator {
     }
 
     fun getNextCheckinDate(item: CheckinItem, from: Date = Date()): Date? {
+        // 已终止的任务不再返回下次签到日期
+        if (item.terminated == 1) return null
+
+        val endDate = parseDateOnly(item.endDate)
         val cal = Calendar.getInstance().apply {
             time = from
             set(Calendar.HOUR_OF_DAY, 0)
@@ -257,7 +378,11 @@ object CycleCalculator {
                     cal.time
                 )
             ) {
-                return cal.time
+                // 如果找到可签到日期，需同时满足未超过结束日期
+                if (endDate == null || !cal.time.after(endDate)) {
+                    return cal.time
+                }
+                return null
             }
             cal.add(Calendar.DAY_OF_MONTH, 1)
         }

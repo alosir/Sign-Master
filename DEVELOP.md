@@ -1,7 +1,7 @@
 # 签到大师 - 开发者技术指南
 
-**当前版本**: v1.1.2  
-**最后更新**: 2026-07-17
+**当前版本**: v1.2.0  
+**最后更新**: 2026-07-18
 
 ## 目录
 
@@ -336,6 +336,8 @@ compareBy(
 |------|------|------|
 | 主 Activity | `ui/MainActivity.kt` | 底部导航 + FAB |
 | 版本更新 Activity | `ui/VersionUpdateActivity.kt` | 更新日志 + 检查更新 |
+| 任务详情 Dialog | `ui/dialog/TaskDetailDialogFragment.kt` | 统一详情与操作入口 |
+| 保活服务 | `service/ForegroundKeepAliveService.kt` | 前台服务保持后台运行 |
 | 今日 Fragment | `ui/fragment/TodayFragment.kt` | 今日待签到 / 已完成 |
 | 任务 Fragment | `ui/fragment/TasksFragment.kt` | ViewPager + 未签到 / 已签到 |
 | 统计 Fragment | `ui/fragment/StatisticsFragment.kt` | 日历 / 完成率 / 排行 |

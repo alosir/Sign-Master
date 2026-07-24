@@ -38,6 +38,14 @@ class StreakRankAdapter : RecyclerView.Adapter<StreakRankAdapter.ViewHolder>() {
         fun bind(info: StatisticsCalculator.StreakInfo, rank: Int) {
             binding.rankNumber.text = rank.toString()
             binding.itemName.text = info.item.name
+
+            if (info.item.description.isNullOrEmpty()) {
+                binding.itemDesc.visibility = android.view.View.GONE
+            } else {
+                binding.itemDesc.text = info.item.description
+                binding.itemDesc.visibility = android.view.View.VISIBLE
+            }
+
             binding.streakDays.text = "${info.streak} 天"
         }
     }

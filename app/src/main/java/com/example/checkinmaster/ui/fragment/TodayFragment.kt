@@ -150,6 +150,11 @@ class TodayFragment : Fragment() {
             onDelete = { position ->
                 val model = completedAdapter.getItemAt(position)
                 viewModel.deleteRecord(model.record)
+            },
+            onDetail = { position ->
+                val model = completedAdapter.getItemAt(position)
+                showTaskDetail(model.item)
+                completedAdapter.notifyItemChanged(position)
             }
         )
         ItemTouchHelper(callback).attachToRecyclerView(recyclerView)
@@ -249,27 +254,9 @@ class TodayFragment : Fragment() {
     }
 
     private fun showTaskDetail(item: CheckinItem) {
-        val cycle = CycleCalculator.getCycleShortDescription(item)
-        val nextDate = CycleCalculator.getNextCheckinDate(item)
-            ?.let { CycleCalculator.formatRelativeDate(it) }
-            ?: "未知"
-        val reminder = if (item.reminderTime.isNullOrEmpty()) "未设置" else item.reminderTime
-
-        val message = buildString {
-            appendLine("周期：$cycle")
-            appendLine("下次签到：$nextDate")
-            appendLine("提醒时间：$reminder")
-            if (!item.description.isNullOrEmpty()) {
-                appendLine("描述：${item.description}")
-            }
-        }
-
-        androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle(item.name)
-            .setMessage(message)
-            .setPositiveButton(R.string.edit_item) { _, _ -> openEditDialog(item.id) }
-            .setNegativeButton(R.string.button_cancel, null)
-            .show()
+        com.alosir.task.ui.dialog.TaskDetailDialogFragment
+            .newInstance(item.id)
+            .show(parentFragmentManager, "task_detail_${item.id}")
     }
 
     private fun openEditDialog(itemId: Int) {

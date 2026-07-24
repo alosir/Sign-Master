@@ -122,6 +122,7 @@ class EditCheckinBottomSheet : BottomSheetDialogFragment() {
                             it.skipHolidays,
                             it.skipWeekends
                         )
+                        endPicker.setEndRules(it.endType, it.endCount, it.endDate)
 
                         when (it.type) {
                             CheckinType.WEBSITE -> {
@@ -157,6 +158,7 @@ class EditCheckinBottomSheet : BottomSheetDialogFragment() {
             val newUrl = editUrl.text.toString().trim()
             val newReminderTime = if (checkEnableReminder.isChecked) timePicker.getTime() else null
             val cycle = cyclePicker.getCycleRules()
+            val endRules = endPicker.getEndRules()
 
             lifecycleScope.launch {
                 try {
@@ -170,7 +172,10 @@ class EditCheckinBottomSheet : BottomSheetDialogFragment() {
                         cycleMonthDays = cycle.monthDaysJson,
                         skipHolidays = cycle.skipHolidays,
                         skipWeekends = cycle.skipWeekends,
-                        reminderTime = newReminderTime
+                        reminderTime = newReminderTime,
+                        endType = endRules.endType,
+                        endCount = endRules.endCount,
+                        endDate = endRules.endDate
                     )
 
                     withContext(Dispatchers.IO) {

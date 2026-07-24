@@ -19,21 +19,42 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         tools:text="1" />
 
-    <TextView
-        android:id="@+id/itemName"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_weight="1"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:textColor="?attr/colorOnSurface"
-        tools:text="支付宝" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurface"
+            tools:text="支付宝" />
+
+        <TextView
+            android:id="@+id/itemDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:visibility="gone"
+            tools:text="每日蚂蚁森林收能量"
+            tools:visibility="visible" />
+
+    </LinearLayout>
 
     <ImageView
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
         android:contentDescription="@string/statistics_streak_ranking"
         android:src="@drawable/ic_statistics"
@@ -44,6 +65,8 @@
         android:id="@+id/streakDays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:minWidth="48dp"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="@color/streak_fire"
         android:textStyle="bold"

@@ -14,7 +14,8 @@ import java.util.Locale
 class CompletedSwipeCallback(
     private val adapter: CompletedCheckinAdapter,
     private val onRestore: (position: Int) -> Unit,
-    private val onDelete: (position: Int) -> Unit
+    private val onDelete: (position: Int) -> Unit,
+    private val onDetail: (position: Int) -> Unit
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -35,9 +36,10 @@ class CompletedSwipeCallback(
             ItemTouchHelper.RIGHT -> {
                 if (isToday) onRestore(position) else onDelete(position)
             }
-            ItemTouchHelper.LEFT -> onDelete(position)
+            ItemTouchHelper.LEFT -> onDetail(position)
         }
-        // 数据变更由 ViewModel/LiveData 驱动 Adapter 刷新。
+        // 数据变更由 ViewModel/LiveData 驱动 Adapter 刷新；
+        // 详情打开不修改数据，由 Fragment 自行 notifyItemChanged 复位。
     }
 
     override fun onChildDraw(
@@ -65,8 +67,8 @@ class CompletedSwipeCallback(
             val (text, color) = when {
                 dX > 0 && isToday -> "恢复" to itemView.context.getColor(R.color.md_tertiary)
                 dX > 0 -> "删除" to itemView.context.getColor(R.color.md_error)
-                dX < 0 -> "删除" to itemView.context.getColor(R.color.md_error)
-                else -> "" to itemView.context.getColor(R.color.md_error)
+                dX < 0 -> "详情" to itemView.context.getColor(R.color.md_primary)
+                else -> "" to itemView.context.getColor(R.color.md_primary)
             }
 
             if (dX > 0) {

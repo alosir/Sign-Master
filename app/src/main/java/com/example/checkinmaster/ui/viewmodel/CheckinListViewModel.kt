@@ -74,10 +74,12 @@ class CheckinListViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     private suspend fun refreshPendingItems() {
+        autoTerminateExpiredItems()
         val allItems = itemDao.getAll()
         val todayStr = todayString()
 
         val pending = allItems.mapNotNull { item ->
+            if (item.terminated == 1) return@mapNotNull null
             val nextDate = CycleCalculator.getNextCheckinDate(item) ?: return@mapNotNull null
             if (dateOnly(nextDate) != todayStr) return@mapNotNull null
             PendingItemUiModel(item, nextDate)
@@ -88,16 +90,37 @@ class CheckinListViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     private suspend fun refreshAllPendingItems() {
+        autoTerminateExpiredItems()
         val allItems = itemDao.getAll()
         val todayStr = todayString()
 
         val pending = allItems.mapNotNull { item ->
+            if (item.terminated == 1) return@mapNotNull null
             val nextDate = CycleCalculator.getNextCheckinDate(item) ?: return@mapNotNull null
             if (dateOnly(nextDate) < todayStr) return@mapNotNull null
             PendingItemUiModel(item, nextDate)
         }.sortedWith(pendingComparator())
 
         _allPendingItems.postValue(pending)
+    }
+
+    /**
+     * 自动终止已达到结束条件（按次数/按日期）的任务。
+     */
+    private suspend fun autoTerminateExpiredItems() {
+        val allItems = itemDao.getAll()
+        val today = todayString()
+        val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(today) ?: return
+
+        for (item in allItems) {
+            if (item.terminated == 1) continue
+            if (item.endType == com.alosir.task.data.entity.CheckinEndType.NEVER) continue
+
+            val recordCount = recordDao.getCountByItemId(item.id)
+            if (CycleCalculator.isTerminated(item, recordCount, todayDate)) {
+                itemDao.updateTerminated(item.id, 1, today)
+            }
+        }
     }
 
     private fun dateOnly(date: Date): String =
@@ -192,6 +215,21 @@ class CheckinListViewModel(application: Application) : AndroidViewModel(applicat
                     refreshAllPendingItems()
                     refreshCompletedRecords(reset = true)
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun terminateItem(itemId: Int) {
+        viewModelScope.launch {
+            try {
+                val today = todayString()
+                ReminderScheduler.cancel(getApplication(), itemId)
+                itemDao.updateTerminated(itemId, 1, today)
+                refreshPendingItems()
+                refreshAllPendingItems()
+                refreshCompletedRecords(reset = true)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

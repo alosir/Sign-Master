@@ -179,7 +179,7 @@
     <string name="about">关于</string>
     <string name="version">版本 %1$s</string>
     <string name="update_date">更新日期 %1$s</string>
-    <string name="app_update_date">2026-07-17</string>
+    <string name="app_update_date">2026-07-18</string>
     <string name="current_version">当前版本</string>
     <string name="version_update_title">版本更新</string>
     <string name="check_update">检查更新</string>
@@ -189,6 +189,37 @@
     <string name="download_started">已开始下载新版本</string>
     <string name="download_failed">下载失败</string>
     <string name="check_update_failed">检查更新失败</string>
+    <string name="end_checkin_setting">结束签到</string>
+    <string name="end_type_never">永不结束</string>
+    <string name="end_type_count">按次数</string>
+    <string name="end_type_date">按日期</string>
+    <string name="end_count_unit">次</string>
+    <string name="end_desc_never">永不结束</string>
+    <string name="end_desc_count">签到 %1$d 次后自动结束</string>
+    <string name="end_desc_date">%1$s 后自动结束</string>
+    <string name="previous_month">上一月</string>
+    <string name="next_month">下一月</string>
+    <string name="terminate_item">终止</string>
+    <string name="terminate_confirm">终止后该任务将停止签到，如需恢复请重新创建。</string>
+    <string name="delete_item_confirm">将彻底删除该任务所有记录</string>
+    <string name="task_detail_title">任务详情</string>
+    <string name="status_pending_today">待签到（今天）</string>
+    <string name="status_pending_future">待签到（%1$s）</string>
+    <string name="status_completed_today">已完成（今天）</string>
+    <string name="status_completed_history">已完成</string>
+    <string name="status_terminated">已终止</string>
+    <string name="cycle_rule">周期规则</string>
+    <string name="next_checkin_date">下次签到</string>
+    <string name="reminder_time">提醒时间</string>
+    <string name="complete_checkin">完成</string>
+    <string name="restore">恢复</string>
+    <string name="not_set">未设置</string>
+    <string name="background_autostart">开启自启动</string>
+    <string name="background_battery">忽略电池优化</string>
+    <string name="background_keep_alive">保持后台运行</string>
+    <string name="background_autostart_hint">请手动开启自启动权限</string>
+    <string name="background_battery_hint">已加入电池优化白名单</string>
+    <string name="background_battery_not_hint">未加入电池优化白名单</string>
 
     <!-- Permissions -->
     <string name="permission_query_apps_required">需要获取已安装应用列表权限，才能选择需要签到的 APP</string>

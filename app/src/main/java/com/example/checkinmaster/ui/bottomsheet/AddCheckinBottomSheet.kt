@@ -413,6 +413,7 @@ class AddCheckinBottomSheet : BottomSheetDialogFragment() {
         val packageName = selectedPackageName
         val desc = appDetailBinding?.editDesc?.text?.toString()?.trim()
         val cycle = appDetailBinding?.cyclePicker?.getCycleRules()
+        val endRules = appDetailBinding?.endPicker?.getEndRules()
         val reminderTime = if (appDetailBinding?.checkEnableReminder?.isChecked == true) {
             appDetailBinding?.timePicker?.getTime()
         } else null
@@ -436,7 +437,10 @@ class AddCheckinBottomSheet : BottomSheetDialogFragment() {
                     cycleMonthDays = cycle?.monthDaysJson,
                     skipHolidays = cycle?.skipHolidays ?: false,
                     skipWeekends = cycle?.skipWeekends ?: false,
-                    reminderTime = reminderTime?.ifEmpty { null }
+                    reminderTime = reminderTime?.ifEmpty { null },
+                    endType = endRules?.endType ?: com.alosir.task.data.entity.CheckinEndType.NEVER,
+                    endCount = endRules?.endCount ?: 0,
+                    endDate = endRules?.endDate
                 )
                 val id = repository.insertItem(item).toInt()
                 ReminderScheduler.schedule(requireContext(), item.copy(id = id))
@@ -456,6 +460,7 @@ class AddCheckinBottomSheet : BottomSheetDialogFragment() {
             var url = editUrl.text.toString().trim()
             val desc = editDesc.text.toString().trim()
             val cycle = cyclePicker.getCycleRules()
+            val endRules = endPicker.getEndRules()
             val reminderTime = if (checkEnableReminder.isChecked) timePicker.getTime() else null
 
             if (name.isEmpty()) {
@@ -485,7 +490,10 @@ class AddCheckinBottomSheet : BottomSheetDialogFragment() {
                         cycleMonthDays = cycle.monthDaysJson,
                         skipHolidays = cycle.skipHolidays,
                         skipWeekends = cycle.skipWeekends,
-                        reminderTime = reminderTime?.ifEmpty { null }
+                        reminderTime = reminderTime?.ifEmpty { null },
+                        endType = endRules.endType,
+                        endCount = endRules.endCount,
+                        endDate = endRules.endDate
                     )
                     val id = repository.insertItem(item).toInt()
                     ReminderScheduler.schedule(requireContext(), item.copy(id = id))
@@ -505,6 +513,7 @@ class AddCheckinBottomSheet : BottomSheetDialogFragment() {
             val name = editName.text.toString().trim()
             val desc = editDesc.text.toString().trim()
             val cycle = cyclePicker.getCycleRules()
+            val endRules = endPicker.getEndRules()
             val reminderTime = if (checkEnableReminder.isChecked) timePicker.getTime() else null
 
             if (name.isEmpty()) {
@@ -526,7 +535,10 @@ class AddCheckinBottomSheet : BottomSheetDialogFragment() {
                         cycleMonthDays = cycle.monthDaysJson,
                         skipHolidays = cycle.skipHolidays,
                         skipWeekends = cycle.skipWeekends,
-                        reminderTime = reminderTime?.ifEmpty { null }
+                        reminderTime = reminderTime?.ifEmpty { null },
+                        endType = endRules.endType,
+                        endCount = endRules.endCount,
+                        endDate = endRules.endDate
                     )
                     val id = repository.insertItem(item).toInt()
                     ReminderScheduler.schedule(requireContext(), item.copy(id = id))

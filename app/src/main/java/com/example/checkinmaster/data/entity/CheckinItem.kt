@@ -61,7 +61,27 @@ data class CheckinItem(
     
     @ColumnInfo(name = "last_checkin_date")
     val lastCheckinDate: String? = null,
-    
+
+    // 结束类型：0=永不结束，1=按次数，2=按日期
+    @ColumnInfo(name = "end_type")
+    val endType: Int = 0,
+
+    // 按次数结束时的次数（1~200）
+    @ColumnInfo(name = "end_count")
+    val endCount: Int = 0,
+
+    // 按日期结束时的结束日期 yyyy-MM-dd
+    @ColumnInfo(name = "end_date")
+    val endDate: String? = null,
+
+    // 是否已终止
+    @ColumnInfo(name = "terminated")
+    val terminated: Int = 0,
+
+    // 终止日期 yyyy-MM-dd
+    @ColumnInfo(name = "terminated_date")
+    val terminatedDate: String? = null,
+
     @ColumnInfo(name = "created_at")
     val createdAt: String = getCurrentTimestamp(),
     
@@ -86,4 +106,10 @@ object CheckinCycleType {
     const val DAY = 0
     const val WEEK = 1
     const val MONTH = 2
+}
+
+object CheckinEndType {
+    const val NEVER = 0
+    const val BY_COUNT = 1
+    const val BY_DATE = 2
 }
