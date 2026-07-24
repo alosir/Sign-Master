@@ -203,6 +203,21 @@ class CheckinListViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    fun skipCheckin(itemId: Int) {
+        viewModelScope.launch {
+            try {
+                val today = todayString()
+                // 跳过：仅更新最后签到日期，不创建签到记录
+                itemDao.updateLastCheckinDate(itemId, today)
+                refreshPendingItems()
+                refreshAllPendingItems()
+                refreshCompletedRecords(reset = true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun resetCheckinTime(itemId: Int) {
         viewModelScope.launch {
             try {

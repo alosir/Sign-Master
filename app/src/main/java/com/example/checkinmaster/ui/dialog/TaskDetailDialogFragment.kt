@@ -19,6 +19,7 @@ import com.alosir.task.ui.bottomsheet.EditCheckinBottomSheet
 import com.alosir.task.ui.viewmodel.CheckinListViewModel
 import com.alosir.task.util.AppLauncher
 import com.alosir.task.util.CycleCalculator
+import com.alosir.task.util.IconManager
 import com.alosir.task.util.ReminderScheduler
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
@@ -102,13 +103,7 @@ class TaskDetailDialogFragment : DialogFragment() {
         binding.taskDescText.visibility = if (item.description.isNullOrEmpty()) View.GONE else View.VISIBLE
 
         // 图标
-        binding.taskIcon.setImageResource(
-            when (item.type) {
-                CheckinType.APP -> R.drawable.ic_app
-                CheckinType.WEBSITE -> R.drawable.ic_website
-                else -> R.drawable.ic_other
-            }
-        )
+        loadTaskIcon(item)
 
         // 状态
         val todayStr = dateFormat.format(Date())
@@ -161,6 +156,25 @@ class TaskDetailDialogFragment : DialogFragment() {
         }
     }
 
+    private fun loadTaskIcon(item: CheckinItem) {
+        when (item.type) {
+            CheckinType.APP -> {
+                val icon = IconManager.loadAppIcon(requireContext(), item.packageName ?: "")
+                if (icon != null) {
+                    binding.taskIcon.setImageDrawable(icon)
+                } else {
+                    binding.taskIcon.setImageResource(R.drawable.ic_default_app)
+                }
+            }
+            CheckinType.WEBSITE -> {
+                binding.taskIcon.setImageResource(R.drawable.ic_default_website)
+            }
+            else -> {
+                binding.taskIcon.setImageResource(R.drawable.ic_default_other)
+            }
+        }
+    }
+
     private fun setupButtons(item: CheckinItem) {
         val todayStr = dateFormat.format(Date())
         val isTodayPending = item.terminated == 0 &&
@@ -172,12 +186,18 @@ class TaskDetailDialogFragment : DialogFragment() {
         val canTerminate = item.terminated == 0
 
         binding.btnComplete.visibility = if (isTodayPending) View.VISIBLE else View.GONE
+        binding.btnSkip.visibility = if (isTodayPending) View.VISIBLE else View.GONE
         binding.btnRestore.visibility = if (isTodayCompleted) View.VISIBLE else View.GONE
         binding.btnEdit.visibility = if (item.terminated == 0) View.VISIBLE else View.GONE
         binding.btnTerminate.visibility = if (canTerminate) View.VISIBLE else View.GONE
 
         binding.btnComplete.setOnClickListener {
             viewModel.markCheckined(item.id)
+            dismiss()
+        }
+
+        binding.btnSkip.setOnClickListener {
+            viewModel.skipCheckin(item.id)
             dismiss()
         }
 

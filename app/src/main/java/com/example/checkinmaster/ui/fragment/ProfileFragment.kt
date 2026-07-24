@@ -1,10 +1,8 @@
 package com.alosir.task.ui.fragment
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
@@ -12,12 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.alosir.task.BuildConfig
 import com.alosir.task.R
 import com.alosir.task.databinding.FragmentProfileBinding
-import com.alosir.task.service.ForegroundKeepAliveService
 import com.alosir.task.ui.MainActivity
 import com.alosir.task.ui.VersionUpdateActivity
 import com.alosir.task.util.NotificationPermissionHelper
@@ -59,20 +55,8 @@ class ProfileFragment : Fragment() {
             handleNotificationPermissionClick()
         }
 
-        binding.btnAutoStart.setOnClickListener {
-            openAutoStartSettings()
-        }
-
         binding.btnBatteryOptimization.setOnClickListener {
             requestIgnoreBatteryOptimizations()
-        }
-
-        binding.switchKeepAlive.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                startKeepAliveService()
-            } else {
-                stopKeepAliveService()
-            }
         }
     }
 
@@ -101,43 +85,6 @@ class ProfileFragment : Fragment() {
         notificationPermissionHelper.openNotificationSettings()
     }
 
-    private fun openAutoStartSettings() {
-        val packageName = requireContext().packageName
-        val intents = listOf(
-            // 通用应用详情页
-            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.parse("package:$packageName")
-            },
-            // 小米
-            Intent("miui.intent.action.APP_AUTO_START").apply {
-                addCategory(Intent.CATEGORY_DEFAULT)
-            },
-            // 华为
-            Intent().apply {
-                component = ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity")
-            },
-            // OPPO
-            Intent().apply {
-                component = ComponentName("com.coloros.safecenter", "com.coloros.safecenter.startupapp.StartupAppListActivity")
-            },
-            // vivo
-            Intent().apply {
-                component = ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.AddWhiteListActivity")
-            }
-        )
-
-        for (intent in intents) {
-            try {
-                startActivity(intent)
-                return
-            } catch (e: Exception) {
-                // 尝试下一个
-            }
-        }
-
-        Toast.makeText(requireContext(), R.string.background_autostart_hint, Toast.LENGTH_SHORT).show()
-    }
-
     private fun requestIgnoreBatteryOptimizations() {
         try {
             val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
@@ -151,22 +98,9 @@ class ProfileFragment : Fragment() {
                 startActivity(intent)
             } catch (e2: Exception) {
                 e2.printStackTrace()
+                Toast.makeText(requireContext(), "无法打开电池优化设置，请手动前往系统设置", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun startKeepAliveService() {
-        val intent = Intent(requireContext(), ForegroundKeepAliveService::class.java).apply {
-            action = ForegroundKeepAliveService.ACTION_START
-        }
-        ContextCompat.startForegroundService(requireContext(), intent)
-    }
-
-    private fun stopKeepAliveService() {
-        val intent = Intent(requireContext(), ForegroundKeepAliveService::class.java).apply {
-            action = ForegroundKeepAliveService.ACTION_STOP
-        }
-        requireContext().startService(intent)
     }
 
     override fun onDestroyView() {

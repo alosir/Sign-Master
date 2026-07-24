@@ -214,6 +214,7 @@
     <string name="reminder_time">提醒时间</string>
     <string name="complete_checkin">完成</string>
     <string name="restore">恢复</string>
+    <string name="skip">跳过</string>
     <string name="not_set">未设置</string>
     <string name="background_autostart">开启自启动</string>
     <string name="background_battery">忽略电池优化</string>

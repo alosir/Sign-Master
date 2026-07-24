@@ -43,8 +43,8 @@ android {
         applicationId = "com.alosir.task"
         minSdk = 21
         targetSdk = 34
-        versionCode = 43
-        versionName = "1.2.1"
+        versionCode = 44
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

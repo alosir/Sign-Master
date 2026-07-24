@@ -7,7 +7,7 @@
     android:layout_margin="16dp"
     app:cardCornerRadius="24dp"
     app:cardElevation="8dp"
-    app:cardBackgroundColor="?attr/colorSurface">
+    app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,16 +21,21 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/taskIcon"
+            <FrameLayout
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@drawable/bg_status_indicator"
-                android:backgroundTint="?attr/colorPrimary"
-                android:contentDescription="@string/task_detail_title"
-                android:padding="10dp"
-                app:tint="?attr/colorOnPrimary"
-                tools:src="@drawable/ic_app" />
+                android:background="@drawable/bg_default_app_icon">
+
+                <ImageView
+                    android:id="@+id/taskIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/task_detail_title"
+                    android:scaleType="centerCrop"
+                    tools:src="@drawable/ic_app" />
+
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -228,6 +233,19 @@
                 android:textSize="13sp"
                 android:visibility="gone"
                 tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSkip"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="10dp"
+                android:text="@string/skip"
+                android:textSize="13sp"
+                android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRestore"
