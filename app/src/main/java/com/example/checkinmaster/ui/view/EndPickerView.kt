@@ -124,7 +124,7 @@ class EndPickerView @JvmOverloads constructor(
     private fun setupSwipe() {
         binding.endDateCalendar.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
-            true
+            false
         }
     }
 

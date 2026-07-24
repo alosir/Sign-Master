@@ -15,6 +15,25 @@ object ChangelogData {
 
     val versions: List<VersionInfo> = listOf(
         VersionInfo(
+            name = "v1.2.2",
+            date = "2026-07-24",
+            items = listOf(
+                "任务详情弹窗背景改为纯白色，图标与列表页保持一致",
+                "待签到任务增加「跳过」按钮，不记入已签到",
+                "移除我的页开机自启动与保活开关"
+            )
+        ),
+        VersionInfo(
+            name = "v1.2.1",
+            date = "2026-07-24",
+            items = listOf(
+                "优化任务详情弹窗按钮布局与样式",
+                "结束签到设置移到提醒时间下方",
+                "结束签到按钮样式与周期选择器保持一致",
+                "日历支持左右滑动切换月份，增加月份边界限制"
+            )
+        ),
+        VersionInfo(
             name = "v1.2.0",
             date = "2026-07-18",
             items = listOf(
