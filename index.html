@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>签到大师 Sign Master — 智能签到管理助手</title>
-    <meta name="description" content="签到大师是一款 Android 本地签到管理应用，支持 APP / 网站 / 自定义任务、灵活周期、提醒通知、数据统计与版本更新。数据完全本地存储，安全可靠。">
+    <meta name="description" content="签到大师是一款 Android 本地签到管理应用，支持 APP / 网站 / 自定义任务、灵活周期、提醒通知、数据统计、任务终止与版本更新。数据完全本地存储，安全可靠。">
     <link rel="icon" href="logo.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -365,7 +365,7 @@
                 </h1>
 
                 <p class="text-slate-500 text-lg leading-relaxed max-w-md mb-8">
-                    签到大师是一款 Android 本地签到管理应用。集中管理 APP、网站和自定义任务，灵活周期、提醒通知、数据统计与版本更新，全部本地运行，隐私无忧。
+                    签到大师是一款 Android 本地签到管理应用。集中管理 APP、网站和自定义任务，灵活周期、提醒通知、数据统计、任务终止与版本更新，全部本地运行，隐私无忧。
                 </p>
 
                 <div class="flex flex-wrap gap-4 mb-10">
@@ -408,18 +408,44 @@
                         <img src="logo.png" alt="签到大师" class="absolute inset-0 m-auto w-40 h-40 object-contain opacity-90 drop-shadow-2xl">
                         <div class="absolute bottom-6 left-0 right-0 px-4">
                             <div class="glass rounded-2xl p-4">
-                                <div class="text-xs text-slate-400 mb-2 mono">今日待签到</div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="text-sm text-slate-600">APP 签到</span>
-                                    <span class="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 text-xs">▶</span>
-                                </div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="text-sm text-slate-600">网站签到</span>
-                                    <span class="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 text-xs">🌐</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm text-slate-600">自定义任务</span>
-                                    <span class="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-600 text-xs">✓</span>
+                                <div class="text-xs text-slate-400 mb-3 mono">今日待签到</div>
+                                <div class="space-y-2">
+                                    <div class="bg-white/80 rounded-xl p-3 shadow-sm">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-white text-xs">支</div>
+                                                <div>
+                                                    <div class="text-xs font-semibold text-slate-700">支付宝</div>
+                                                    <div class="text-[10px] text-slate-400">每天 · 09:00</div>
+                                                </div>
+                                            </div>
+                                            <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px]">✓</div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white/80 rounded-xl p-3 shadow-sm">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center text-white text-xs">知</div>
+                                                <div>
+                                                    <div class="text-xs font-semibold text-slate-700">知乎</div>
+                                                    <div class="text-[10px] text-slate-400">每周一三五 · 12:00</div>
+                                                </div>
+                                            </div>
+                                            <div class="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-[10px]">▶</div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white/80 rounded-xl p-3 shadow-sm">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center text-white text-xs">喝</div>
+                                                <div>
+                                                    <div class="text-xs font-semibold text-slate-700">喝水</div>
+                                                    <div class="text-[10px] text-slate-400">每2小时 · 跳过</div>
+                                                </div>
+                                            </div>
+                                            <div class="w-6 h-6 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500 text-[10px]">⏭</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -494,6 +520,12 @@
                     <div class="w-14 h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">📊</div>
                     <h3 class="text-xl font-bold mb-3 text-slate-800">数据统计</h3>
                     <p class="text-slate-500 text-sm leading-relaxed">月度日历、完成率、类型分布、连续签到排行，清晰掌握签到状态。</p>
+                </div>
+
+                <div class="feature-card glass rounded-3xl p-8">
+                    <div class="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">⏹️</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">任务终止</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">支持按次数、按日期自动结束签到，或手动终止任务，历史记录完整保留。</p>
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8">
