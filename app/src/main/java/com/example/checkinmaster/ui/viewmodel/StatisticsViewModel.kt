@@ -18,6 +18,7 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
     private val database = CheckinDatabase.getDatabase(application)
     private val itemDao = database.checkinItemDao()
     private val recordDao = database.checkinRecordDao()
+    private val skipDao = database.skipRecordDao()
 
     private val _uiState = MutableLiveData(StatisticsUiState())
     val uiState: LiveData<StatisticsUiState> = _uiState
@@ -41,6 +42,7 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
 
                 val (monthStart, monthEnd) = StatisticsCalculator.getMonthStartEnd(year, month)
                 val monthRecords = recordDao.getRecordsBetween(monthStart, monthEnd)
+                val monthSkips = skipDao.getBetween(monthStart, monthEnd)
 
                 val totalCheckins = recordDao.getTotalCount()
                 val weeklyRate = StatisticsCalculator.calculateCompletionRate(weekRecords, 7)
@@ -51,7 +53,7 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
 
                 val typeDistribution = StatisticsCalculator.calculateTypeDistribution(allRecords, items)
                 val streakRanking = StatisticsCalculator.calculateStreakRanking(allRecords, items)
-                val calendarDays = buildCalendarDays(year, month, monthRecords, items)
+                val calendarDays = buildCalendarDays(year, month, monthRecords, monthSkips, items)
 
                 val (earliestYear, earliestMonth) = computeEarliestRecordMonth(allRecords)
 
@@ -165,10 +167,12 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
         year: Int,
         month: Int,
         records: List<CheckinRecord>,
+        skips: List<com.alosir.task.data.entity.SkipRecord>,
         items: List<CheckinItem>
     ): List<CalendarDay> {
         val daysInMonth = StatisticsCalculator.getDaysInMonth(year, month)
         val recordsByDate = records.groupBy { it.checkinDate }
+        val skipsByDate = skips.groupBy { it.skipDate }
         val dateFormat = java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         return (1..daysInMonth).map { day ->
@@ -176,13 +180,20 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
             val date = dateFormat.parse(dateStr) ?: Date()
             val dayRecords = recordsByDate[dateStr].orEmpty()
             val completedItemIds = dayRecords.map { it.itemId }.toSet()
+            val skippedItemIds = skipsByDate[dateStr].orEmpty().map { it.itemId }.toSet()
             val scheduledItems = items.filter { CycleCalculator.isScheduledForDate(it, date) }
-            val scheduledCount = scheduledItems.size
-            val completedCount = scheduledItems.count { completedItemIds.contains(it.id) }
+            // 跳过的任务当天无需签到，从统计中排除；但跳过后又完成签到的仍按完成计
+            val countableItems = scheduledItems.filter {
+                !skippedItemIds.contains(it.id) || completedItemIds.contains(it.id)
+            }
+            val countableCount = countableItems.size
+            val completedCount = countableItems.count { completedItemIds.contains(it.id) }
 
+            // 全部完成、或部分完成+其余跳过 → 全部完成（绿色）；
+            // 全部跳过且无任何完成 → 无记录
             val status = when {
-                scheduledCount == 0 -> DayStatus.NONE
-                completedCount >= scheduledCount -> DayStatus.FULL
+                countableCount == 0 -> DayStatus.NONE
+                completedCount >= countableCount -> DayStatus.FULL
                 completedCount > 0 -> DayStatus.PARTIAL
                 else -> DayStatus.NONE
             }

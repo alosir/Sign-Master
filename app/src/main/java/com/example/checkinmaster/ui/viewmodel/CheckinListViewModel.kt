@@ -22,6 +22,7 @@ class CheckinListViewModel(application: Application) : AndroidViewModel(applicat
     private val database = CheckinDatabase.getDatabase(application)
     private val itemDao = database.checkinItemDao()
     private val recordDao = database.checkinRecordDao()
+    private val skipDao = database.skipRecordDao()
 
     private val appItems: LiveData<List<CheckinItem>> = itemDao.getAllByType(0)
     private val websiteItems: LiveData<List<CheckinItem>> = itemDao.getAllByType(1)
@@ -192,6 +193,8 @@ class CheckinListViewModel(application: Application) : AndroidViewModel(applicat
                             checkinDate = today
                         )
                     )
+                    // 完成签到后，当天的跳过标记失效
+                    skipDao.deleteByItemIdAndDate(itemId, today)
                     itemDao.updateLastCheckinDate(itemId, today)
                     refreshPendingItems()
                     refreshAllPendingItems()
@@ -207,7 +210,16 @@ class CheckinListViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             try {
                 val today = todayString()
-                // 跳过：仅更新最后签到日期，不创建签到记录
+                // 跳过：持久化跳过记录（当天不再提醒、不纳入完成统计），
+                // 并更新最后签到日期使任务从今日待签到列表移除
+                if (skipDao.getByItemIdAndDate(itemId, today) == null) {
+                    skipDao.insert(
+                        com.alosir.task.data.entity.SkipRecord(
+                            itemId = itemId,
+                            skipDate = today
+                        )
+                    )
+                }
                 itemDao.updateLastCheckinDate(itemId, today)
                 refreshPendingItems()
                 refreshAllPendingItems()

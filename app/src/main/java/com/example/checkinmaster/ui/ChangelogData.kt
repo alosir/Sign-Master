@@ -15,6 +15,24 @@ object ChangelogData {
 
     val versions: List<VersionInfo> = listOf(
         VersionInfo(
+            name = "v1.2.4",
+            date = "2026-08-10",
+            items = listOf(
+                "修复统计日历：任务全部完成、或部分完成且其余已跳过时，日期显示绿色",
+                "跳过状态持久化保存，全部跳过且无完成的日期计为无记录",
+                "跳过记录纳入数据导出与导入"
+            )
+        ),
+        VersionInfo(
+            name = "v1.2.3",
+            date = "2026-07-25",
+            items = listOf(
+                "移除我的页忽略电池优化入口",
+                "任务详情弹窗背景适配深色模式",
+                "结束签到日历头部改为年月居左、切换按钮居右并修复滑动切换"
+            )
+        ),
+        VersionInfo(
             name = "v1.2.2",
             date = "2026-07-24",
             items = listOf(

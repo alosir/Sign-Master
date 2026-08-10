@@ -4,6 +4,7 @@ import android.content.Context
 import com.alosir.task.data.CheckinDatabase
 import com.alosir.task.data.entity.CheckinItem
 import com.alosir.task.data.entity.CheckinRecord
+import com.alosir.task.data.entity.SkipRecord
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -18,6 +19,7 @@ object DataExportImport {
     data class ExportData(
         val items: List<CheckinItem>,
         val records: List<CheckinRecord>,
+        val skipRecords: List<SkipRecord>? = null,
         val exportTime: Long,
         val version: String
     )
@@ -52,10 +54,12 @@ object DataExportImport {
             val database = CheckinDatabase.getDatabase(context)
             val items = database.checkinItemDao().getAll()
             val records = database.checkinRecordDao().getAllRecords()
+            val skipRecords = database.skipRecordDao().getAll()
 
             val exportData = ExportData(
                 items = items,
                 records = records,
+                skipRecords = skipRecords,
                 exportTime = System.currentTimeMillis(),
                 version = EXPORT_VERSION
             )
@@ -120,6 +124,18 @@ object DataExportImport {
                     } catch (e: Exception) {
                         e.printStackTrace()
                         skippedRecords++
+                    }
+                }
+
+                // 跳过记录：旧版本导出文件中没有该字段，按空列表处理
+                for (skip in exportData.skipRecords ?: emptyList()) {
+                    try {
+                        val existing = database.skipRecordDao().getByItemIdAndDate(skip.itemId, skip.skipDate)
+                        if (existing == null) {
+                            database.skipRecordDao().insert(skip)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
                 }
 

@@ -9,9 +9,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.alosir.task.data.dao.CheckinItemDao
 import com.alosir.task.data.dao.CheckinRecordDao
 import com.alosir.task.data.dao.ScriptDao
+import com.alosir.task.data.dao.SkipRecordDao
 import com.alosir.task.data.entity.AutomationScript
 import com.alosir.task.data.entity.CheckinItem
 import com.alosir.task.data.entity.CheckinRecord
+import com.alosir.task.data.entity.SkipRecord
 
 val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(database: SupportSQLiteDatabase) {
@@ -67,15 +69,33 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
     }
 }
 
+val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            "CREATE TABLE IF NOT EXISTS skip_records (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "item_id INTEGER NOT NULL, " +
+                "skip_date TEXT NOT NULL, " +
+                "created_at TEXT NOT NULL, " +
+                "FOREIGN KEY(item_id) REFERENCES checkin_items(id) ON DELETE CASCADE" +
+                ")"
+        )
+        database.execSQL(
+            "CREATE INDEX IF NOT EXISTS index_skip_records_item_id ON skip_records(item_id)"
+        )
+    }
+}
+
 @Database(
-    entities = [CheckinItem::class, CheckinRecord::class, AutomationScript::class],
-    version = 5,
+    entities = [CheckinItem::class, CheckinRecord::class, SkipRecord::class, AutomationScript::class],
+    version = 6,
     exportSchema = false
 )
 abstract class CheckinDatabase : RoomDatabase() {
     
     abstract fun checkinItemDao(): CheckinItemDao
     abstract fun checkinRecordDao(): CheckinRecordDao
+    abstract fun skipRecordDao(): SkipRecordDao
     abstract fun scriptDao(): ScriptDao
     
     companion object {
@@ -89,7 +109,7 @@ abstract class CheckinDatabase : RoomDatabase() {
                     CheckinDatabase::class.java,
                     "checkin_database"
                 )
-                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                 .build()
                 INSTANCE = instance
                 instance

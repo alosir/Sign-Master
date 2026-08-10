@@ -30,3 +30,6 @@ keystore.properties
 *.dex
 *.class
 *.pro
+
+# Blog/marketing outputs (not open-source project content)
+blog-*
