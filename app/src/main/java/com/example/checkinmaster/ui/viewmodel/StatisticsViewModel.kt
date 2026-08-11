@@ -53,7 +53,8 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
 
                 val typeDistribution = StatisticsCalculator.calculateTypeDistribution(allRecords, items)
                 val streakRanking = StatisticsCalculator.calculateStreakRanking(allRecords, items)
-                val calendarDays = buildCalendarDays(year, month, monthRecords, monthSkips, items)
+                val recordCountByItem = allRecords.groupBy { it.itemId }.mapValues { it.value.size }
+                val calendarDays = buildCalendarDays(year, month, monthRecords, monthSkips, items, recordCountByItem)
 
                 val (earliestYear, earliestMonth) = computeEarliestRecordMonth(allRecords)
 
@@ -168,7 +169,8 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
         month: Int,
         records: List<CheckinRecord>,
         skips: List<com.alosir.task.data.entity.SkipRecord>,
-        items: List<CheckinItem>
+        items: List<CheckinItem>,
+        recordCountByItem: Map<Int, Int>
     ): List<CalendarDay> {
         val daysInMonth = StatisticsCalculator.getDaysInMonth(year, month)
         val recordsByDate = records.groupBy { it.checkinDate }
@@ -181,7 +183,11 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
             val dayRecords = recordsByDate[dateStr].orEmpty()
             val completedItemIds = dayRecords.map { it.itemId }.toSet()
             val skippedItemIds = skipsByDate[dateStr].orEmpty().map { it.itemId }.toSet()
-            val scheduledItems = items.filter { CycleCalculator.isScheduledForDate(it, date) }
+            // 已终止或已过结束日期的任务，自终止/结束之日起不再计入应签到
+            val scheduledItems = items.filter {
+                CycleCalculator.isScheduledForDate(it, date) &&
+                    !CycleCalculator.isTerminatedOnDate(it, recordCountByItem[it.id] ?: 0, date)
+            }
             // 跳过的任务当天无需签到，从统计中排除；但跳过后又完成签到的仍按完成计
             val countableItems = scheduledItems.filter {
                 !skippedItemIds.contains(it.id) || completedItemIds.contains(it.id)

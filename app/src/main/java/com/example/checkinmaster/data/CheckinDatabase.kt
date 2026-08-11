@@ -86,9 +86,27 @@ val MIGRATION_5_6 = object : Migration(5, 6) {
     }
 }
 
+val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        // 旧版本（v1.2.4 之前）的「跳过」只更新 last_checkin_date 而不留记录，
+        // 导致这些日期在统计日历中被算作「计划了但没完成」（黄色）。
+        // 将「有 last_checkin_date 但当天无签到记录」的历史数据补录为跳过记录。
+        database.execSQL(
+            "INSERT INTO skip_records (item_id, skip_date, created_at) " +
+                "SELECT id, last_checkin_date, datetime('now', 'localtime') " +
+                "FROM checkin_items " +
+                "WHERE last_checkin_date IS NOT NULL " +
+                "AND NOT EXISTS (SELECT 1 FROM checkin_records r " +
+                "WHERE r.item_id = checkin_items.id AND r.checkin_date = checkin_items.last_checkin_date) " +
+                "AND NOT EXISTS (SELECT 1 FROM skip_records s " +
+                "WHERE s.item_id = checkin_items.id AND s.skip_date = checkin_items.last_checkin_date)"
+        )
+    }
+}
+
 @Database(
     entities = [CheckinItem::class, CheckinRecord::class, SkipRecord::class, AutomationScript::class],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class CheckinDatabase : RoomDatabase() {
@@ -109,7 +127,7 @@ abstract class CheckinDatabase : RoomDatabase() {
                     CheckinDatabase::class.java,
                     "checkin_database"
                 )
-                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                 .build()
                 INSTANCE = instance
                 instance

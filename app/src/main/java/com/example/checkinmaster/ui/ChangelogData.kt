@@ -15,6 +15,14 @@ object ChangelogData {
 
     val versions: List<VersionInfo> = listOf(
         VersionInfo(
+            name = "v1.2.5",
+            date = "2026-08-10",
+            items = listOf(
+                "修复旧版本升级后任务全部完成仍显示黄色的问题：历史跳过记录自动补录",
+                "统计日历不再把已终止或已过结束日期的任务计入当天应签到"
+            )
+        ),
+        VersionInfo(
             name = "v1.2.4",
             date = "2026-08-10",
             items = listOf(
