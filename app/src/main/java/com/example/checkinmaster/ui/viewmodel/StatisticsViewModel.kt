@@ -37,22 +37,12 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
                 val items = itemDao.getAll()
                 val allRecords = recordDao.getAllRecords()
 
-                val (weekStart, weekEnd) = StatisticsCalculator.getWeekStartEnd()
-                val weekRecords = recordDao.getRecordsBetween(weekStart, weekEnd)
-
                 val (monthStart, monthEnd) = StatisticsCalculator.getMonthStartEnd(year, month)
                 val monthRecords = recordDao.getRecordsBetween(monthStart, monthEnd)
                 val monthSkips = skipDao.getBetween(monthStart, monthEnd)
 
-                val totalCheckins = recordDao.getTotalCount()
-                val weeklyRate = StatisticsCalculator.calculateCompletionRate(weekRecords, 7)
-                val monthlyRate = StatisticsCalculator.calculateCompletionRate(
-                    monthRecords,
-                    StatisticsCalculator.getDaysInMonth(year, month)
-                )
-
                 val typeDistribution = StatisticsCalculator.calculateTypeDistribution(allRecords, items)
-                val streakRanking = StatisticsCalculator.calculateStreakRanking(allRecords, items)
+                val monthlyRanking = StatisticsCalculator.calculateMonthlyRanking(monthRecords, items)
                 val recordCountByItem = allRecords.groupBy { it.itemId }.mapValues { it.value.size }
                 val calendarDays = buildCalendarDays(year, month, monthRecords, monthSkips, items, recordCountByItem)
 
@@ -66,19 +56,10 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
                         year = year,
                         month = month,
                         monthDisplay = getMonthDisplay(year, month),
-                        weeklyStats = CompletionStats(
-                            rate = weeklyRate,
-                            completedDays = StatisticsCalculator.getDistinctDates(weekRecords).size,
-                            totalDays = 7
-                        ),
-                        monthlyStats = CompletionStats(
-                            rate = monthlyRate,
-                            completedDays = StatisticsCalculator.getDistinctDates(monthRecords).size,
-                            totalDays = StatisticsCalculator.getDaysInMonth(year, month)
-                        ),
-                        totalCheckins = totalCheckins,
+                        monthlyCheckins = monthRecords.size,
+                        currentStreak = StatisticsCalculator.calculateOngoingStreak(allRecords),
                         typeDistribution = typeDistribution,
-                        streakRanking = streakRanking,
+                        monthlyRanking = monthlyRanking,
                         calendarDays = calendarDays,
                         earliestYear = earliestYear,
                         earliestMonth = earliestMonth,
@@ -215,11 +196,10 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
         val year: Int = 0,
         val month: Int = 0,
         val monthDisplay: String = "",
-        val weeklyStats: CompletionStats = CompletionStats(),
-        val monthlyStats: CompletionStats = CompletionStats(),
-        val totalCheckins: Int = 0,
+        val monthlyCheckins: Int = 0,
+        val currentStreak: Int = 0,
         val typeDistribution: StatisticsCalculator.TypeDistribution = StatisticsCalculator.TypeDistribution(0, 0, 0, 0),
-        val streakRanking: List<StatisticsCalculator.StreakInfo> = emptyList(),
+        val monthlyRanking: List<StatisticsCalculator.MonthlyRankInfo> = emptyList(),
         val calendarDays: List<CalendarDay> = emptyList(),
         val earliestYear: Int = 0,
         val earliestMonth: Int = 1,
@@ -227,12 +207,6 @@ class StatisticsViewModel(application: Application) : AndroidViewModel(applicati
         val currentMonth: Int = 1,
         val selectedDate: String? = null,
         val selectedDateRecords: List<RecordWithItem> = emptyList()
-    )
-
-    data class CompletionStats(
-        val rate: Int = 0,
-        val completedDays: Int = 0,
-        val totalDays: Int = 0
     )
 
     data class CalendarDay(

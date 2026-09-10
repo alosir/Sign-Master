@@ -9,7 +9,7 @@
 
 ## 当前版本
 
-**v1.2.5**
+**v1.3.0**
 
 - 版本号规则
   - 修复 bug / 修改已有功能 → 第三位 +1，例如 `v1.2.3`
@@ -39,7 +39,7 @@
 
 - **今日**：展示当天待签到任务与当天已完成任务
 - **任务**：以「未签到 / 已签到」双 Tab 展示全部任务
-- **统计**：月度日历、完成率、类型分布、连续签到排行
+- **统计**：月度日历、当月已签到与连续签到概览、类型分布、当月签到排行
 - **我的**：数据导出 / 导入、通知权限管理
 
 ### 4. 签到提醒
@@ -59,9 +59,9 @@
 ### 6. 统计与可视化
 
 - 月度日历：以圆点标记「全部完成 / 部分完成」日期
-- 本月完成率、本周完成率
+- 当月已签到次数（随日历月份切换）、连续签到天数
 - APP / 网站 / 其他 类型分布饼图
-- 连续签到天数排行
+- 当月签到次数排行
 
 ### 7. 视觉与交互
 
@@ -122,7 +122,7 @@ app/src/main/
 │   ├── service/                          # 无障碍服务（AutomationService）
 │   ├── ui/                               # UI 层
 │   │   ├── MainActivity.kt
-│   │   ├── adapter/                      # PendingCheckinAdapter / CompletedCheckinAdapter / AppListAdapter / StreakRankAdapter
+│   │   ├── adapter/                      # PendingCheckinAdapter / CompletedCheckinAdapter / AppListAdapter / MonthlyRankAdapter
 │   │   ├── bottomsheet/                  # AddCheckinBottomSheet / EditCheckinBottomSheet
 │   │   ├── fragment/                     # TodayFragment / TasksFragment / StatisticsFragment / ProfileFragment
 │   │   ├── view/                         # CheckinCalendarView / CyclePickerView / PieChartView / TimePickerView
@@ -175,6 +175,7 @@ app/src/main/
 
 | 版本 | 改动 |
 |------|------|
+| v1.3.0 | 统计页顶部概览改版：「本周完成率 / 本月完成率 / 累计签到」改为「当月已签到(次)」（随日历月份切换，跳过或未签到不计）与「连续签到(天)」（有签到记录即算签过，中断重新算，当天未签不算中断从昨天起算）；「连续签到排行」改为「当月签到排行」：随日历月份切换，按当月累计签到次数降序，单位「天」改「次」；StreakRankAdapter 重命名为 MonthlyRankAdapter |
 | v1.2.5 | 修复旧版本（v1.2.4 之前）升级后任务全部完成仍显示黄色的问题：数据库迁移 v6→v7 时自动把「有 last_checkin_date 但当天无签到记录」的历史数据补录为跳过记录；统计日历不再把已终止或已过结束日期的任务计入当天应签到（自终止/结束之日起排除）；数据库版本 6→7 |
 | v1.2.4 | 修复统计页日历：当天任务全部完成、或部分完成且其余任务已跳过时，日期显示绿色（此前误显黄色）；「跳过」状态持久化保存（当天不再提醒、不计入完成统计）；全部跳过且无任务完成的日期计为「无记录」；跳过记录纳入数据导出/导入 |
 | v1.2.3 | 移除我的页忽略电池优化；任务详情弹窗背景适配深色模式；按日期日历改为年月左上、<◎>按钮右上，并支持左右滑动 |
@@ -191,4 +192,4 @@ app/src/main/
 ---
 
 **最后更新**: 2026-08-10  
-**项目版本**: v1.2.5
+**项目版本**: v1.3.0

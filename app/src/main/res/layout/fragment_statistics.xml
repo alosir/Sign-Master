@@ -69,45 +69,19 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/weeklyRateText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/colorSecondary"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            tools:text="86%" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/statistics_weekly_completion"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/monthlyRateText"
+                            android:id="@+id/monthlyCheckinsText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            tools:text="62%" />
+                            tools:text="42" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="@string/statistics_monthly_completion"
+                            android:text="@string/statistics_monthly_checkins"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
 
@@ -121,19 +95,19 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/totalCheckinsText"
+                            android:id="@+id/currentStreakText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="?attr/colorTertiary"
+                            android:textColor="?attr/colorSecondary"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            tools:text="128" />
+                            tools:text="7" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="@string/statistics_total_checkins"
+                            android:text="@string/statistics_current_streak"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp" />
 
@@ -498,7 +472,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/statistics_streak_ranking"
+                    android:text="@string/statistics_monthly_ranking"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -515,7 +489,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:gravity="center"
-                    android:text="@string/statistics_empty_streak"
+                    android:text="@string/statistics_empty_ranking"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp"
                     android:visibility="gone" />

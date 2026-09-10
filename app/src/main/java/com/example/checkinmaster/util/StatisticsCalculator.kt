@@ -36,18 +36,6 @@ object StatisticsCalculator {
         return start to end
     }
 
-    fun getWeekStartEnd(reference: Date = Date()): Pair<String, String> {
-        val calendar = Calendar.getInstance().apply { time = reference }
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        val diffToMonday = if (dayOfWeek == Calendar.SUNDAY) 6 else dayOfWeek - Calendar.MONDAY
-        calendar.add(Calendar.DAY_OF_MONTH, -diffToMonday)
-        calendar.clearTime()
-        val start = formatDate(calendar.time)
-        calendar.add(Calendar.DAY_OF_MONTH, 6)
-        val end = formatDate(calendar.time)
-        return start to end
-    }
-
     fun getDistinctDates(records: List<CheckinRecord>): Set<String> {
         return records.map { it.checkinDate }.toSortedSet()
     }
@@ -64,6 +52,38 @@ object StatisticsCalculator {
         val calendar = Calendar.getInstance().apply {
             time = reference
             clearTime()
+        }
+
+        var streak = 0
+        while (true) {
+            val dateStr = formatDate(calendar.time)
+            if (dateStr in dates) {
+                streak++
+                calendar.add(Calendar.DAY_OF_MONTH, -1)
+            } else {
+                break
+            }
+        }
+        return streak
+    }
+
+    /**
+     * 计算进行中的连续签到天数（用于统计页概览）。
+     * 规则：有签到记录的日期（无论全部完成或部分完成）视为签过到。
+     * 截至当天向前追溯，中断则停止；今天还没有记录时，从昨天开始计（当天尚未结束，不算中断）。
+     */
+    fun calculateOngoingStreak(records: List<CheckinRecord>, reference: Date = Date()): Int {
+        val dates = getDistinctDates(records)
+        if (dates.isEmpty()) return 0
+
+        val calendar = Calendar.getInstance().apply {
+            time = reference
+            clearTime()
+        }
+
+        // 今天还没有签到记录时，从昨天开始计
+        if (formatDate(calendar.time) !in dates) {
+            calendar.add(Calendar.DAY_OF_MONTH, -1)
         }
 
         var streak = 0
@@ -149,20 +169,19 @@ object StatisticsCalculator {
     }
 
     /**
-     * 计算每个签到项的当前连续签到天数。
+     * 计算当月签到排行：按各任务在给定记录集合（通常为当月记录）中的
+     * 累计签到次数降序排列，无记录的任务不列入。
      */
-    fun calculateStreakRanking(
+    fun calculateMonthlyRanking(
         records: List<CheckinRecord>,
-        items: List<CheckinItem>,
-        reference: Date = Date()
-    ): List<StreakInfo> {
-        val recordsByItem = records.groupBy { it.itemId }
-        return items.mapNotNull { item ->
-            val itemRecords = recordsByItem[item.id] ?: return@mapNotNull null
-            val streak = calculateCurrentStreak(itemRecords, reference)
-            if (streak > 0) StreakInfo(item, streak) else null
-        }
-            .sortedByDescending { it.streak }
+        items: List<CheckinItem>
+    ): List<MonthlyRankInfo> {
+        val itemMap = items.associateBy { it.id }
+        return records.groupBy { it.itemId }
+            .mapNotNull { (itemId, itemRecords) ->
+                itemMap[itemId]?.let { MonthlyRankInfo(it, itemRecords.size) }
+            }
+            .sortedWith(compareByDescending<MonthlyRankInfo> { it.count }.thenBy { it.item.name })
     }
 
     private fun Calendar.clearTime() {
@@ -183,8 +202,8 @@ object StatisticsCalculator {
         fun otherPercent(): Int = if (totalCount == 0) 0 else otherCount * 100 / totalCount
     }
 
-    data class StreakInfo(
+    data class MonthlyRankInfo(
         val item: CheckinItem,
-        val streak: Int
+        val count: Int
     )
 }

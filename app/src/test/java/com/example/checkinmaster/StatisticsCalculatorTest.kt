@@ -157,37 +157,51 @@ class StatisticsCalculatorTest {
     }
 
     @Test
-    fun streakRanking_returnsTopN() {
+    fun ongoingStreak_todayUnsigned_fallsBackToYesterday() {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_MONTH, -1)
+        val records = (0..2).map {
+            val date = StatisticsCalculator.formatDate(calendar.time)
+            calendar.add(Calendar.DAY_OF_MONTH, -1)
+            record(1, date)
+        }
+        // 今天无记录，但昨天起连续 3 天有记录，不算中断
+        val result = StatisticsCalculator.calculateOngoingStreak(records)
+        assertEquals(3, result)
+    }
+
+    @Test
+    fun ongoingStreak_gapYesterday_returnsZero() {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_MONTH, -2)
+        val records = listOf(record(1, StatisticsCalculator.formatDate(calendar.time)))
+        // 今天和昨天都无记录，连续已中断
+        val result = StatisticsCalculator.calculateOngoingStreak(records)
+        assertEquals(0, result)
+    }
+
+    @Test
+    fun monthlyRanking_sortedByCountDesc() {
         val items = listOf(
             item(1, "App1", CheckinType.APP),
             item(2, "Web1", CheckinType.WEBSITE),
             item(3, "Other1", CheckinType.OTHER)
         )
 
-        val records = mutableListOf<CheckinRecord>()
+        val records = listOf(
+            record(1, "2026-08-01"),
+            record(1, "2026-08-02"),
+            record(1, "2026-08-03"),
+            record(2, "2026-08-01")
+        )
 
-        // Item 1: 3 天连续
-        val cal1 = Calendar.getInstance()
-        repeat(3) {
-            records.add(record(1, StatisticsCalculator.formatDate(cal1.time)))
-            cal1.add(Calendar.DAY_OF_MONTH, -1)
-        }
-
-        // Item 2: 5 天连续
-        val cal2 = Calendar.getInstance()
-        repeat(5) {
-            records.add(record(2, StatisticsCalculator.formatDate(cal2.time)))
-            cal2.add(Calendar.DAY_OF_MONTH, -1)
-        }
-
-        // Item 3: 无记录
-
-        val result = StatisticsCalculator.calculateStreakRanking(records, items, topN = 2)
+        // Item 3 无记录不列入；Item 1 次数最多排第一
+        val result = StatisticsCalculator.calculateMonthlyRanking(records, items)
         assertEquals(2, result.size)
-        assertEquals(2, result[0].item.id)
-        assertEquals(5, result[0].streak)
-        assertEquals(1, result[1].item.id)
-        assertEquals(3, result[1].streak)
+        assertEquals(1, result[0].item.id)
+        assertEquals(3, result[0].count)
+        assertEquals(2, result[1].item.id)
+        assertEquals(1, result[1].count)
     }
 
     @Test

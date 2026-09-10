@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alosir.task.R
 import com.alosir.task.data.entity.CheckinType
 import com.alosir.task.databinding.FragmentStatisticsBinding
-import com.alosir.task.ui.adapter.StreakRankAdapter
+import com.alosir.task.ui.adapter.MonthlyRankAdapter
 import com.alosir.task.ui.view.PieChartView
 import com.alosir.task.ui.viewmodel.StatisticsViewModel
 import com.alosir.task.util.CrashLogger
@@ -25,7 +25,7 @@ class StatisticsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: StatisticsViewModel by viewModels()
-    private val streakAdapter = StreakRankAdapter()
+    private val streakAdapter = MonthlyRankAdapter()
 
     private var dateDetailDialog: AlertDialog? = null
 
@@ -204,9 +204,8 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun updateOverview(state: StatisticsViewModel.StatisticsUiState) {
-        binding.weeklyRateText.text = getString(R.string.statistics_rate_format, state.weeklyStats.rate)
-        binding.monthlyRateText.text = getString(R.string.statistics_rate_format, state.monthlyStats.rate)
-        binding.totalCheckinsText.text = state.totalCheckins.toString()
+        binding.monthlyCheckinsText.text = state.monthlyCheckins.toString()
+        binding.currentStreakText.text = state.currentStreak.toString()
     }
 
     private fun updateCalendar(state: StatisticsViewModel.StatisticsUiState) {
@@ -270,13 +269,13 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun updateStreakRanking(state: StatisticsViewModel.StatisticsUiState) {
-        if (state.streakRanking.isEmpty()) {
+        if (state.monthlyRanking.isEmpty()) {
             binding.streakRecyclerView.visibility = View.GONE
             binding.emptyStreakText.visibility = View.VISIBLE
         } else {
             binding.streakRecyclerView.visibility = View.VISIBLE
             binding.emptyStreakText.visibility = View.GONE
-            streakAdapter.submitList(state.streakRanking)
+            streakAdapter.submitList(state.monthlyRanking)
         }
     }
 

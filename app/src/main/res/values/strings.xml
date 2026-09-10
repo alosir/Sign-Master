@@ -36,23 +36,21 @@
     <string name="statistics_coming_soon">统计功能即将上线</string>
     <string name="statistics_coming_soon_desc">这里将展示完成率、日历回顾和连续签到排行</string>
     <string name="statistics_overview">概览</string>
-    <string name="statistics_weekly_completion">本周完成率</string>
-    <string name="statistics_monthly_completion">本月完成率</string>
-    <string name="statistics_total_checkins">累计签到</string>
+    <string name="statistics_monthly_checkins">当月已签到(次)</string>
+    <string name="statistics_current_streak">连续签到(天)</string>
     <string name="statistics_type_distribution">类型分布</string>
-    <string name="statistics_streak_ranking">连续签到排行</string>
+    <string name="statistics_monthly_ranking">当月签到排行</string>
     <string name="statistics_previous_month">上个月</string>
     <string name="statistics_today">今天</string>
     <string name="statistics_next_month">下个月</string>
     <string name="statistics_calendar_legend_full">全部完成</string>
     <string name="statistics_calendar_legend_partial">部分完成</string>
     <string name="statistics_calendar_legend_none">无记录</string>
-    <string name="statistics_empty_streak">暂无连续签到记录，去完成今日任务吧</string>
+    <string name="statistics_empty_ranking">当月暂无签到记录，去完成今日任务吧</string>
     <string name="statistics_day_records_title">%1$s 签到记录</string>
     <string name="statistics_record_time">签到时间：%1$s</string>
     <string name="statistics_auto_record">自动签到</string>
-    <string name="statistics_rate_format">%1$d%%</string>
-    <string name="statistics_streak_days">%1$d 天</string>
+    <string name="statistics_count_unit">%1$d 次</string>
 
     <!-- Profile Placeholder -->
     <string name="profile_coming_soon">更多功能即将到来</string>

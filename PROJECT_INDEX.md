@@ -1,6 +1,6 @@
 # 签到大师项目 - 完整索引
 
-**当前版本**: v1.2.5  
+**当前版本**: v1.3.0  
 **最后更新**: 2026-08-10
 
 > 本文件是项目文件清单与功能索引，最新结构以 [README.md](README.md) 的「项目结构」段为准。
@@ -61,7 +61,7 @@ Sign-Master/
 - `ui/adapter/PendingCheckinAdapter.kt`
 - `ui/adapter/CompletedCheckinAdapter.kt`
 - `ui/adapter/AppListAdapter.kt`
-- `ui/adapter/StreakRankAdapter.kt`
+- `ui/adapter/MonthlyRankAdapter.kt`
 - `ui/view/CheckinCalendarView.kt`
 - `ui/view/CyclePickerView.kt`
 - `ui/view/PieChartView.kt`
@@ -135,7 +135,7 @@ Sign-Master/
 | 签到提醒与系统通知 | ✅ 完成 | 100% |
 | 今日页待签到 / 已完成 | ✅ 完成 | 100% |
 | 任务页未签到 / 已签到 | ✅ 完成 | 100% |
-| 统计页日历 / 完成率 / 类型分布 / 连续签到排行 | ✅ 完成 | 100% |
+| 统计页日历 / 当月已签到与连续签到 / 类型分布 / 当月签到排行 | ✅ 完成 | 100% |
 | 数据导入导出 | ✅ 完成 | 100% |
 | 通知权限管理 | ✅ 完成 | 100% |
 | 深色模式 | ✅ 完成 | 100% |
@@ -186,4 +186,4 @@ app/build/outputs/apk/release/app-release.apk
 ---
 
 *最后更新：2026-08-10*  
-*项目版本：v1.2.5*
+*项目版本：v1.3.0*

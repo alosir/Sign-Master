@@ -1,6 +1,6 @@
 # 签到大师 - 开发者技术指南
 
-**当前版本**: v1.2.5  
+**当前版本**: v1.3.0  
 **最后更新**: 2026-08-10
 
 ## 目录
@@ -204,7 +204,7 @@ sdk.dir=/path/to/android-sdk
 
 - 加载月度统计数据
 - 构建日历日状态（NONE / PARTIAL / FULL）
-- 计算完成率、类型分布、连续签到排行
+- 计算当月已签到次数、连续签到天数、类型分布、当月签到排行
 
 ---
 
@@ -341,7 +341,7 @@ compareBy(
 | 保活服务 | `service/ForegroundKeepAliveService.kt` | 前台服务保持后台运行 |
 | 今日 Fragment | `ui/fragment/TodayFragment.kt` | 今日待签到 / 已完成 |
 | 任务 Fragment | `ui/fragment/TasksFragment.kt` | ViewPager + 未签到 / 已签到 |
-| 统计 Fragment | `ui/fragment/StatisticsFragment.kt` | 日历 / 完成率 / 排行 |
+| 统计 Fragment | `ui/fragment/StatisticsFragment.kt` | 日历 / 当月已签到与连续签到 / 当月排行 |
 | 我的 Fragment | `ui/fragment/ProfileFragment.kt` | 导入导出 / 通知权限 |
 | ViewModel | `ui/viewmodel/CheckinListViewModel.kt` | 签到状态核心 |
 | 添加 BottomSheet | `ui/bottomsheet/AddCheckinBottomSheet.kt` | 添加任务 |
