@@ -15,8 +15,16 @@ object ChangelogData {
 
     val versions: List<VersionInfo> = listOf(
         VersionInfo(
+            name = "v1.3.1",
+            date = "2026-09-16",
+            items = listOf(
+                "替换「今日」Tab 图标，与其他底部导航图标大小一致",
+                "修正 v1.3.0 更新记录日期"
+            )
+        ),
+        VersionInfo(
             name = "v1.3.0",
-            date = "2026-08-10",
+            date = "2026-09-10",
             items = listOf(
                 "统计页概览改为「当月已签到(次)」与「连续签到(天)」，随日历月份联动",
                 "连续签到：当天有任意签到记录即算签过到，今天未签不影响已有连续天数",
