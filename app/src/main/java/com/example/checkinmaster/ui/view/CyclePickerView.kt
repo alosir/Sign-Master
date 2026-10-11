@@ -63,8 +63,7 @@ class CyclePickerView @JvmOverloads constructor(
         currentValue = value.coerceAtLeast(1)
 
         binding.customCycleContainer.visibility = if (isCustom) VISIBLE else GONE
-        binding.weekDayChipGroup.visibility = if (type == CheckinCycleType.WEEK) VISIBLE else GONE
-        binding.monthDayChipGroup.visibility = if (type == CheckinCycleType.MONTH) VISIBLE else GONE
+        updateCycleOptionVisibility()
 
         if (isCustom) {
             updateCustomPickersFromCurrent()
@@ -72,6 +71,22 @@ class CyclePickerView @JvmOverloads constructor(
 
         refreshDescription()
         notifyChanged()
+    }
+
+    /**
+     * 根据当前周期类型更新选项可见性：
+     * - 「每周」显示星期选项、「每月」显示日期选项（含自定义模式下切换单位时）
+     * - 「每周」隐藏并清除「跳过双休日」（周末本身可能就是签到日，避免配置冲突导致任务永不出现）
+     */
+    private fun updateCycleOptionVisibility() {
+        binding.weekDayChipGroup.visibility = if (currentType == CheckinCycleType.WEEK) VISIBLE else GONE
+        binding.monthDayChipGroup.visibility = if (currentType == CheckinCycleType.MONTH) VISIBLE else GONE
+
+        val skipWeekendsAllowed = currentType != CheckinCycleType.WEEK
+        binding.checkSkipWeekends.visibility = if (skipWeekendsAllowed) VISIBLE else GONE
+        if (!skipWeekendsAllowed && binding.checkSkipWeekends.isChecked) {
+            binding.checkSkipWeekends.isChecked = false
+        }
     }
 
     private fun setupCustomPickers() {
@@ -100,6 +115,7 @@ class CyclePickerView @JvmOverloads constructor(
                     else -> CheckinCycleType.DAY
                 }
                 updateValuePickerMax()
+                updateCycleOptionVisibility()
                 refreshDescription()
                 notifyChanged()
             }
@@ -301,8 +317,13 @@ class CyclePickerView @JvmOverloads constructor(
             weekDaysJson = selectedWeekDays.toSortedSet().toJsonArrayString(),
             monthDaysJson = selectedMonthDays.toSortedSet().toJsonArrayString(),
             skipHolidays = binding.checkSkipHolidays.isChecked,
-            skipWeekends = binding.checkSkipWeekends.isChecked
+            skipWeekends = effectiveSkipWeekends()
         )
+    }
+
+    // 「每周」周期不携带「跳过双休日」配置（选项已隐藏）
+    private fun effectiveSkipWeekends(): Boolean {
+        return currentType != CheckinCycleType.WEEK && binding.checkSkipWeekends.isChecked
     }
 
     fun setOnCycleChangedListener(
@@ -318,7 +339,7 @@ class CyclePickerView @JvmOverloads constructor(
             selectedWeekDays.toSet(),
             selectedMonthDays.toSet(),
             binding.checkSkipHolidays.isChecked,
-            binding.checkSkipWeekends.isChecked
+            effectiveSkipWeekends()
         )
     }
 

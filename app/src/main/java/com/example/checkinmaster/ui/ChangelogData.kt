@@ -15,6 +15,16 @@ object ChangelogData {
 
     val versions: List<VersionInfo> = listOf(
         VersionInfo(
+            name = "v1.3.2",
+            date = "2026-10-11",
+            items = listOf(
+                "更新 2026 年中国法定节假日数据（与国务院办公厅放假安排一致）",
+                "「每周」周期不再显示「跳过双休日」选项，避免周末签到任务被整体跳过",
+                "自动修复已有「每周+跳过双休日」任务，升级后不再从待签到列表消失",
+                "修复自定义周期新建时切换周/月不显示对应选项的问题"
+            )
+        ),
+        VersionInfo(
             name = "v1.3.1",
             date = "2026-09-16",
             items = listOf(

@@ -104,9 +104,19 @@ val MIGRATION_6_7 = object : Migration(6, 7) {
     }
 }
 
+val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        // 「每周」周期不再支持「跳过双休日」（若签到日就是周末，二者冲突会导致任务永不出现）。
+        // 清除存量每周任务上的该配置。
+        database.execSQL(
+            "UPDATE checkin_items SET skip_weekends = 0 WHERE cycle_type = 1"
+        )
+    }
+}
+
 @Database(
     entities = [CheckinItem::class, CheckinRecord::class, SkipRecord::class, AutomationScript::class],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 abstract class CheckinDatabase : RoomDatabase() {
@@ -127,7 +137,7 @@ abstract class CheckinDatabase : RoomDatabase() {
                     CheckinDatabase::class.java,
                     "checkin_database"
                 )
-                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
+                .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                 .build()
                 INSTANCE = instance
                 instance
