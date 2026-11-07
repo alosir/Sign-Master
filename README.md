@@ -11,6 +11,7 @@
 
 **v1.3.3**
 
+- 官网：<https://sign.alosir.com>（每次发布随版本同步更新）
 - 版本号规则
   - 修复 bug / 修改已有功能 → 第三位 +1，例如 `v1.2.3`
   - 新增功能 → 第二位 +1，例如 `v1.2.0`
@@ -169,7 +170,7 @@ app/src/main/
 - [PROJECT_INDEX.md](PROJECT_INDEX.md) — 项目文件索引
 - [项目交付报告.md](项目交付报告.md) — 项目交付说明
 - [CheckinMaster-Showcase.html](CheckinMaster-Showcase.html) — 视觉展示页
-- [index.html](index.html) — APP 官网页（含最新 Release APK 下载）
+- [site/index.html](site/index.html) — APP 官网页源码（部署于 <https://sign.alosir.com>，更新后运行 `bash deploy-website.sh` 同步）
 
 ## 版本历史
 

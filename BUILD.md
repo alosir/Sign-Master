@@ -271,5 +271,24 @@ Sign-Master/
 
 ---
 
+## 官网部署
+
+官网主站为 <https://sign.alosir.com>，源码在 `site/`（`index.html` + `logo.png`），托管于阿里云 ECS（实例 `alosir`，乌兰察布，Apache `/var/www/sign`，证书 acme.sh 自动续期）。
+
+每次更新官网内容后，在本机执行：
+
+```bash
+bash deploy-website.sh
+```
+
+脚本通过 Workbench CLI 把变更的文件同步到服务器（先比对 md5，仅上传有变化的文件）。
+
+前置要求：
+
+- 已安装 `workbench` CLI（<https://workbench-cli.oss-cn-hangzhou.aliyuncs.com/install.sh>）
+- `~/.workbench/config.json` 已配置阿里云 AK（需 ECS Workbench 与 AliDNS 权限）
+
+---
+
 **维护者**: Sign Master Dev  
-**最后更新**: 2026-07-13
+**最后更新**: 2026-11-07
