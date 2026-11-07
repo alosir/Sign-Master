@@ -356,7 +356,7 @@
             <div class="reveal-left relative z-10">
                 <div class="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs text-slate-500 mb-6">
                     <span class="w-2 h-2 bg-green-500 rounded-full pulse-dot"></span>
-                    v1.3.2 已发布 · 数据完全本地存储
+                    v1.3.3 已发布 · 数据完全本地存储
                 </div>
 
                 <h1 class="text-5xl md:text-6xl font-black leading-tight mb-6 text-slate-800">
@@ -405,7 +405,7 @@
                 <div class="phone-frame tilt" id="phoneFrame">
                     <div class="phone-notch"></div>
                     <div class="phone-screen">
-                        <img src="logo.png" alt="签到大师" class="absolute inset-0 m-auto w-40 h-40 object-contain opacity-90 drop-shadow-2xl">
+                        <img src="logo.png" alt="签到大师" class="absolute top-14 left-0 right-0 mx-auto w-28 h-28 object-contain drop-shadow-xl">
                         <div class="absolute bottom-6 left-0 right-0 px-4">
                             <div class="glass rounded-2xl p-4">
                                 <div class="text-xs text-slate-400 mb-3 mono">今日待签到</div>
@@ -489,14 +489,14 @@
                     <p class="text-slate-500 text-sm leading-relaxed">喝水、运动、用药……任何需要规律完成的任务，都可以加入签到列表。</p>
                 </div>
 
-                <div class="feature-card glass rounded-3xl p-8 lg:col-span-2">
+                <div class="feature-card glass rounded-3xl p-8">
                     <div class="w-14 h-14 rounded-2xl bg-orange-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">⚡</div>
                     <h3 class="text-xl font-bold mb-3 text-slate-800">周期与提醒引擎</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-6 max-w-2xl">
-                        每天 / 每周 / 每月 / 自定义 四种周期模式，支持多选星期几、多选日期、跳过节假日与周末。
-                        到达提醒时间自动推送系统通知，点击通知直达今日任务。
+                    <p class="text-slate-500 text-sm leading-relaxed mb-6">
+                        每天 / 每周 / 每月 / 自定义 四种周期模式，支持多选星期几、多选日期，
+                        可跳过法定节假日（与国务院放假安排同步）与双休日，到达提醒时间自动推送系统通知。
                     </p>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-2 gap-4">
                         <div class="glass-strong rounded-xl p-4 text-center">
                             <div class="text-lg font-bold text-green-600">每天</div>
                             <div class="text-xs text-slate-400 mt-1">每 N 天</div>
@@ -517,9 +517,15 @@
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8">
+                    <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">⏭️</div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-800">跳过与角标</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">当天临时跳过：不再提醒、不计入统计，也不影响任务设置。桌面角标实时显示今日待签到数量，全部完成自动消失。</p>
+                </div>
+
+                <div class="feature-card glass rounded-3xl p-8">
                     <div class="w-14 h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center text-3xl mb-6 icon-bounce">📊</div>
                     <h3 class="text-xl font-bold mb-3 text-slate-800">数据统计</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">月度日历、完成率、类型分布、连续签到排行，清晰掌握签到状态。</p>
+                    <p class="text-slate-500 text-sm leading-relaxed">当月已签到、连续签到天数、当月签到排行、完成日历与类型分布，清晰掌握签到状态。</p>
                 </div>
 
                 <div class="feature-card glass rounded-3xl p-8">
@@ -640,7 +646,7 @@
                     <div>
                         <h3 class="font-bold text-lg mb-4 text-blue-600">开发语言</h3>
                         <div class="flex flex-wrap gap-2">
-                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Kotlin 1.9.20</span>
+                            <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Kotlin 1.9.24</span>
                             <span class="glass px-3 py-1.5 rounded-full text-xs text-slate-600">Java 17</span>
                         </div>
                     </div>
@@ -699,11 +705,11 @@
                     </div>
 
                     <div class="mt-8 flex flex-wrap justify-center gap-6 text-sm text-slate-400">
-                        <span class="mono">v1.3.2</span>
+                        <span class="mono">v1.3.3</span>
                         <span>·</span>
-                        <span>6.3 MB</span>
+                        <span>6.6 MB</span>
                         <span>·</span>
-                        <span>2026-10-11</span>
+                        <span>2026-11-07</span>
                     </div>
                 </div>
             </div>

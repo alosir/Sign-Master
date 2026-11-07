@@ -15,6 +15,13 @@ object ChangelogData {
 
     val versions: List<VersionInfo> = listOf(
         VersionInfo(
+            name = "v1.3.3",
+            date = "2026-11-07",
+            items = listOf(
+                "更新 2027 年中国法定节假日数据（与国务院办公厅放假安排一致）"
+            )
+        ),
+        VersionInfo(
             name = "v1.3.2",
             date = "2026-10-11",
             items = listOf(
